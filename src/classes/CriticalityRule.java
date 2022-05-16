@@ -6,7 +6,7 @@ public class CriticalityRule {
 
     }
 
-    private ResultType verifyCriticality() {
+    private void verifyCriticality() {
         // Verify if the result of a practice it's critical or reserved
     }
 }

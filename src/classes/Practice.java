@@ -1,6 +1,6 @@
 package classes;
 import java.util.*;
-import classes.enumerations.ResultType
+import classes.enumerations.ResultType;
 
 import javax.xml.transform.Result;
 
@@ -21,9 +21,9 @@ public class Practice {
         this.resultETD = resultETD;
     }
 
-    protected ResultType getResultType() {
+    protected void getResultType() {
         // Get the type of the result (could be Critical or Reserved)
-        return /* something */
+        // return /* something */
     }
 
     private void createPractice() {
