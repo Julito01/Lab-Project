@@ -3,9 +3,8 @@ package vista;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLOutput;
 
-public class MainFrame extends JFrame {
+public class LoginFrame extends JFrame {
     private JPanel mainPanel;
     private JLabel titleLabel;
     private JTextField userField;
@@ -19,11 +18,11 @@ public class MainFrame extends JFrame {
     private JLabel exitLabel;
     private JSeparator userSeparator;
     private JSeparator passSeparator;
-    private MainFrame self;
+    private LoginFrame self;
     private int xMouse, yMouse;
     private static Color bgColor = new Color(0x123456);
     //Color verde 45932F
-    public MainFrame(String title) {
+    public LoginFrame(String title) {
         super(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,7 +37,7 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        MainFrame frame = new MainFrame("App prueba"); // Creates a frame setting the title of the app
+        LoginFrame frame = new LoginFrame("App prueba"); // Creates a frame setting the title of the app
         frame.setVisible(true);
 
         ImageIcon image = new ImageIcon("logo.png");
@@ -68,7 +67,7 @@ public class MainFrame extends JFrame {
         createUserButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                FrmCrearUsuario frame = new FrmCrearUsuario(self, "Crear usuario");
+                CreateUserFrame frame = new CreateUserFrame(self, "Crear usuario");
                 frame.setVisible(true);
             }
     });
