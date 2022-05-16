@@ -3,14 +3,15 @@ package vista;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLOutput;
 
 public class MainFrame extends JFrame {
     private JPanel mainPanel;
     private JLabel titleLabel;
     private JTextField userField;
+    private JPasswordField passField;
     private JLabel passLabel;
     private JLabel userLabel;
-    private JPasswordField passField;
     private JButton accessButton;
     private JButton createUserButton;
     private JPanel header;
@@ -21,7 +22,7 @@ public class MainFrame extends JFrame {
     private MainFrame self;
     private int xMouse, yMouse;
     private static Color bgColor = new Color(0x123456);
-
+    //Color verde 45932F
     public MainFrame(String title) {
         super(title);
 
@@ -148,19 +149,18 @@ public class MainFrame extends JFrame {
 
         accessButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 String userInput = userField.getText();
                 String passInput = String.valueOf(passField.getPassword());
 
-                if (userInput != "" && passInput != "") {
-                    System.out.println(userInput == "Ingrese su nombre de usuario...");
-                    System.out.println(passInput == "********");
-                    if (userInput == "Ingrese su nombre de usuario..." && passInput == "********"){
-                        System.out.println("Error, datos incompletos");
-                    }
+                if (userInput.equals("") || passInput.equals("")) {
+                    JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
+                }
+                else if (userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
+                    JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
                 }
                 else {
-                    System.out.println("Inicia sesion");
+                    System.out.println("Usuario: " + userField.getText() + "\nContraseña: " + String.valueOf(passField.getPassword()));
                 }
             }
         });
