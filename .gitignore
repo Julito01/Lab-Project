@@ -1,0 +1,5 @@
+# Deleted files
+out/
+.idea/
+*.iml
+*.DS_Store
