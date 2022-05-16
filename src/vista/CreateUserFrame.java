@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FrmCrearUsuario extends JDialog {
+public class CreateUserFrame extends JDialog {
     private JPanel mainPanel;
     private JTextField userField;
     private JPasswordField passField;
@@ -20,7 +20,7 @@ public class FrmCrearUsuario extends JDialog {
     private JButton submitButton;
     private List<UserType> userTypes = new ArrayList<UserType>();
 
-    public FrmCrearUsuario(Window owner, String title) {
+    public CreateUserFrame(Window owner, String title) {
         super(owner, title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
