@@ -1,14 +1,13 @@
 package model;
 
 public class UserType {
-    private int codigo;
     private String user;
 
-    public UserType(int codigo, String user) {
-        this.codigo = codigo;
+    public UserType(String user) {
         this.user = user;
     }
 
+    @Override
     public String toString() {
         return this.user;
     }
