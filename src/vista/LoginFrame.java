@@ -20,7 +20,7 @@ public class LoginFrame extends JFrame {
     private JSeparator passSeparator;
     private LoginFrame self;
     private int xMouse, yMouse;
-    private static Color bgColor = new Color(0x123456);
+    public static Color bgColor = new Color(0x123456);
     //Color verde 45932F
     public LoginFrame(String title) {
         super(title);
@@ -37,11 +37,11 @@ public class LoginFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        LoginFrame frame = new LoginFrame("App prueba"); // Creates a frame setting the title of the app
+        LoginFrame frame = new LoginFrame("App Laboratorios"); // Creates a frame setting the title of the app
         frame.setVisible(true);
 
-        ImageIcon image = new ImageIcon("logo.png");
-        frame.setIconImage(image.getImage());
+//        ImageIcon image = new ImageIcon("logo.png");
+//        frame.setIconImage(image.getImage());
 
         // Edit of the top bar exit button behavior
         frame.exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -62,15 +62,19 @@ public class LoginFrame extends JFrame {
         frame.passField.setBorder(BorderFactory.createEmptyBorder());
     }
 
+    private void verifyLogin() {
+        // TO DO something
+    }
+
     private void bindEvents() {
         // Event to open create user panel
         createUserButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 CreateUserFrame frame = new CreateUserFrame(self, "Crear usuario");
                 frame.setVisible(true);
             }
-    });
+        });
 
         // Event to drag and relocate the app in the screen
         header.addMouseListener(new MouseAdapter() {
@@ -159,11 +163,14 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
                 }
                 else {
-                    System.out.println("Usuario: " + userField.getText() + "\nContraseña: " + String.valueOf(passField.getPassword()));
+                    String username = userField.getText();
+                    String password = String.valueOf(passField.getPassword());
+                    System.out.println("Usuario: " + username + "\nContraseña: " + password);
+                    self.dispose();
+                    MainFrame frame = new MainFrame(username, password);
+                    frame.setVisible(true);
                 }
             }
         });
-
-
     }
 }
