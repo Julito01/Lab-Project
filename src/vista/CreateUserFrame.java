@@ -1,11 +1,15 @@
 package vista;
 
+import classes.enumerations.UserTypeEnum;
+import com.github.lgooddatepicker.components.DatePicker;
 import model.UserType;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
+import classes.SystemUser;
 
 public class CreateUserFrame extends JDialog {
     private JPanel mainPanel;
@@ -18,21 +22,23 @@ public class CreateUserFrame extends JDialog {
     private JLabel userTypeLabel;
     private JComboBox userTypeField;
     private JButton submitButton;
-    private List<UserType> userTypes = new ArrayList<UserType>();
+    private JLabel dateLabel;
+    private DatePicker dateField;
+    private List<UserTypeEnum> userTypes = new ArrayList<UserTypeEnum>();
 
     public CreateUserFrame(Window owner, String title) {
         super(owner, title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
-        this.setSize(400, 300);
+        this.setSize(460, 300);
         this.setResizable(false);
-        this.setModal(true); // No permite volver a la pantalla anterior hasta cerrar esta
+        this.setModal(true);
         this.asociarEventos();
 
-        userTypes.add(new UserType(1, "Administrador"));
-        userTypes.add(new UserType(2, "Laboratorista"));
-        userTypes.add(new UserType(3, "Recepcionista"));
+        userTypes.add(UserTypeEnum.ADMINISTRADOR);
+        userTypes.add(UserTypeEnum.LABORATORISTA);
+        userTypes.add(UserTypeEnum.RECEPCIONISTA);
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         model.addAll(userTypes);
         userTypeField.setModel(model);
@@ -45,14 +51,17 @@ public class CreateUserFrame extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = userField.getText();
-                String password1 = passField.getText();
-                String password2 = confirmPassField.getText();
-                Object userType = userTypeField.getSelectedItem();
+                String password1 = String.valueOf(passField.getPassword());
+                String password2 = String.valueOf(passField.getPassword());
+                LocalDate birthdate = dateField.getDate();
+                UserTypeEnum userType = (UserTypeEnum)userTypeField.getSelectedItem();
 
                 if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType)) {
-                    System.out.println("Nombre del usuario: " + userField.getText());
-                    System.out.println("Contraseña del usuario: " + passField.getText());
-                    System.out.println("Tipo de usuario creado: " + userTypeField.getSelectedItem());
+                    SystemUser newUser = new SystemUser(1, username, password1, birthdate, userType);
+                    System.out.println("Usuario: " + username);
+                    System.out.println("Contraseña: " + password1);
+                    System.out.println("Fecha de nacimiento: " + birthdate);
+                    System.out.println("Tipo de rol: " + userType);
                     JOptionPane.showMessageDialog(null, "Usuario creado con exito.");
                 }
                 else {
@@ -63,7 +72,7 @@ public class CreateUserFrame extends JDialog {
     }
 
     private boolean verifyUsername(String username) {
-        if (username.length() != 0) {
+        if (username.length() > 4) {
             return true;
         }
         else {
