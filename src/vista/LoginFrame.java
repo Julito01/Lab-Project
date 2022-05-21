@@ -1,5 +1,7 @@
 package vista;
 
+import classes.SystemUser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,6 +23,7 @@ public class LoginFrame extends JFrame {
     private LoginFrame self;
     private int xMouse, yMouse;
     public static Color bgColor = new Color(0x123456);
+
     //Color verde 45932F
     public LoginFrame(String title) {
         super(title);
@@ -144,8 +147,8 @@ public class LoginFrame extends JFrame {
 
                 // User input behavior
                 if (userField.getText().isEmpty()) {
-                userField.setText("Ingrese su nombre de usuario...");
-                userField.setForeground(Color.gray);
+                    userField.setText("Ingrese su nombre de usuario...");
+                    userField.setForeground(Color.gray);
                 }
             }
         });
@@ -158,17 +161,30 @@ public class LoginFrame extends JFrame {
 
                 if (userInput.equals("") || passInput.equals("")) {
                     JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
-                }
-                else if (userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
+                } else if (userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
                     JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
-                }
-                else {
+                } else {
                     String username = userField.getText();
                     String password = String.valueOf(passField.getPassword());
                     System.out.println("Usuario: " + username + "\nContraseña: " + password);
-                    self.dispose();
-                    MainFrame frame = new MainFrame(username, password);
-                    frame.setVisible(true);
+                    if (SystemUser.verifyUserExist(username)) {
+                        self.dispose();
+                        String userType = SystemUser.verifyUserType(username);
+                        System.out.println("Tipo de usuario: " + userType);
+                        if (userType.equals("ADMINISTRADOR")) {
+                            AdminMainFrame frame = new AdminMainFrame();
+                            frame.setVisible(true);
+                        } else if (userType.equals("LABORATORISTA")) {
+                            LabMainFrame frame = new LabMainFrame();
+                            frame.setVisible(true);
+                        }
+//                        else if (SystemUser.verifyUserType() == "RECEPCIONISTA") {
+//                            RecMainFrame frame = new RecMainFrame();
+//                            frame.setVisible(true);
+//                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El usuario ingresado no existe.");
+                    }
                 }
             }
         });
