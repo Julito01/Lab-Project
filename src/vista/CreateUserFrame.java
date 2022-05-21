@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import classes.SystemUser;
 
+
 public class CreateUserFrame extends JDialog {
     private JPanel mainPanel;
     private JTextField userField;
@@ -24,6 +25,7 @@ public class CreateUserFrame extends JDialog {
     private JButton submitButton;
     private JLabel dateLabel;
     private DatePicker dateField;
+    private CreateUserFrame self;
     private List<UserTypeEnum> userTypes = new ArrayList<UserTypeEnum>();
 
     public CreateUserFrame(Window owner, String title) {
@@ -34,8 +36,10 @@ public class CreateUserFrame extends JDialog {
         this.setSize(460, 300);
         this.setResizable(false);
         this.setModal(true);
+        this.self = this;
         this.asociarEventos();
 
+        // Adding the user types to the user type field
         userTypes.add(UserTypeEnum.ADMINISTRADOR);
         userTypes.add(UserTypeEnum.LABORATORISTA);
         userTypes.add(UserTypeEnum.RECEPCIONISTA);
@@ -56,17 +60,18 @@ public class CreateUserFrame extends JDialog {
                 LocalDate birthdate = dateField.getDate();
                 UserTypeEnum userType = (UserTypeEnum)userTypeField.getSelectedItem();
 
-                if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType)) {
+                // User validations
+                if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType) && !SystemUser.verifyUserExist(username)) {
                     SystemUser newUser = new SystemUser(1, username, password1, birthdate, userType);
-                    System.out.println("Usuario: " + username);
-                    System.out.println("Contraseña: " + password1);
-                    System.out.println("Fecha de nacimiento: " + birthdate);
-                    System.out.println("Tipo de rol: " + userType);
                     JOptionPane.showMessageDialog(null, "Usuario creado con exito.");
                 }
-                else {
+                else if (username.equals("") || password1.equals("") || password2.equals("") || birthdate == null) {
                     JOptionPane.showMessageDialog(null, "Faltan completar campos y/o las contraseñas no coinciden.");
                 }
+                else if (SystemUser.verifyUserExist(username)) {
+                    JOptionPane.showMessageDialog(null, "El usuario ingresado ya existe.");
+                }
+                self.dispose();
             }
         });
     }
@@ -97,5 +102,4 @@ public class CreateUserFrame extends JDialog {
             return false;
         }
     }
-
 }
