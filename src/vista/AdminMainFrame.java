@@ -6,7 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
-public class MainFrame extends JFrame {
+public class AdminMainFrame extends JFrame {
     private JPanel mainPanel;
     private JLabel userLabel;
     private JLabel passLabel;
@@ -23,7 +23,7 @@ public class MainFrame extends JFrame {
     private int xMouse, yMouse;
 
 
-    public MainFrame(String username, String password) {
+    public AdminMainFrame() {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(1280, 800);
