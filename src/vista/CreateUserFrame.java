@@ -59,7 +59,7 @@ public class CreateUserFrame extends JDialog {
                 String password2 = String.valueOf(passField.getPassword());
                 LocalDate birthdate = dateField.getDate();
                 UserTypeEnum userType = (UserTypeEnum)userTypeField.getSelectedItem();
-
+                
                 // User validations
                 if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType) && !SystemUser.verifyUserExist(username)) {
                     SystemUser newUser = new SystemUser(1, username, password1, birthdate, userType);
