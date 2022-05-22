@@ -160,9 +160,9 @@ public class LoginFrame extends JFrame {
                 String passInput = String.valueOf(passField.getPassword());
 
                 if (userInput.equals("") || passInput.equals("")) {
-                    JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
+                    JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
                 } else if (userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
-                    JOptionPane.showMessageDialog(self, "Error al iniciar sesion");
+                    JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
                 } else {
                     String username = userField.getText();
                     String password = String.valueOf(passField.getPassword());
@@ -178,10 +178,10 @@ public class LoginFrame extends JFrame {
                             LabMainFrame frame = new LabMainFrame();
                             frame.setVisible(true);
                         }
-//                        else if (SystemUser.verifyUserType() == "RECEPCIONISTA") {
-//                            RecMainFrame frame = new RecMainFrame();
-//                            frame.setVisible(true);
-//                        }
+                        else if (userType.equals("RECEPCIONISTA")) {
+                            RecMainFrame frame = new RecMainFrame();
+                            frame.setVisible(true);
+                        }
                     } else {
                         JOptionPane.showMessageDialog(null, "El usuario ingresado no existe.");
                     }
