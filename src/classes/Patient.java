@@ -1,16 +1,33 @@
 package classes;
 
+import com.opencsv.CSVWriter;
+import config.Database;
+
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Patient extends Person {
-    private int patientId;
-    private char genre;
-    private int edad;
+    private String patientId;
+    private String name;
+    private String address;
+    private String mail;
+    private String genre;
+    private String age;
+    private Patient self;
 
-    public static void main(String[] args) {
-
+    public Patient(String patientId, String name, String address, String mail, String genre, String age) {
+        this.patientId = patientId;
+        this.name = name;
+        this.address = address;
+        this.mail = mail;
+        this.genre = genre;
+        this.age = age;
+        this.self = this;
+        createPatient(this);
     }
-
-    private void createPatient() {
-        // Creates a new patient
+    private void createPatient(Patient patient) {
+        Database.createPatient(patient);
     }
 
     private void deletePatient() {
@@ -19,5 +36,29 @@ public class Patient extends Person {
 
     private void editPatient() {
         // Modifies the data of a desired patient through the patient id
+    }
+
+    public String getId() {
+        return this.patientId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public String getMail() {
+        return this.mail;
+    }
+
+    public String getGenre() {
+        return this.genre;
+    }
+
+    public String getAge() {
+        return this.age;
     }
 }
