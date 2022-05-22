@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public class LabMainFrame extends JFrame {
     private JPanel mainPanel;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane optionPane;
     private JPanel resultTab;
     private JPanel header;
     private JPanel exitButton;
