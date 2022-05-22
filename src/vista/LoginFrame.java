@@ -30,7 +30,7 @@ public class LoginFrame extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
-        this.setSize(800, 500); // sets the x-dimension, and y-dimension of frame
+        this.setSize(1280, 800); // sets the x-dimension, and y-dimension of frame
         this.bindEvents();
         this.self = this;
         this.setUndecorated(true);
