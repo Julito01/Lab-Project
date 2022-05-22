@@ -3,6 +3,7 @@ import classes.enumerations.UserTypeEnum;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import config.Database;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,12 +25,10 @@ public class SystemUser extends Person {
 
     public SystemUser() {}
 
-    public SystemUser(int systemUserId, String username, String password, LocalDate birthdate, UserTypeEnum userType) {
+    public SystemUser(String username, String password, UserTypeEnum userType) {
         super();
-        this.systemUserId = systemUserId;
         this.username = username;
         this.password = password;
-        this.birthdate = birthdate;
         this.userType = userType;
         this.self = this;
         createSystemUser(this);
@@ -37,44 +36,8 @@ public class SystemUser extends Person {
 
     private void createSystemUser(SystemUser user) {
         // Creates a new user in the system and adds it to users.csv
-        try {
-            CSVWriter writer = new CSVWriter(new FileWriter(csvPath, true));
-            String[] userData = {user.username, user.password, user.userType.toString()};
-            writer.writeNext(userData);
-            writer.close();
-        }
-        catch (FileNotFoundException error) {
-            System.out.println("No se encontro el archivo: " + error);
-        }
-        catch (IOException error) {
-            System.out.println("Error: " + error);
-        }
-    }
-
-    public static void getUsers() {
-        try {
-            CSVReader reader = new CSVReader(new FileReader(csvPath));
-            String[] fila;
-            while ((fila = reader.readNext()) != null) {
-                if (fila != null){
-                    String[] userData = {fila[0], fila[1], fila[2]};
-                    systemUsers.add(userData);
-                }
-            }
-            reader.close();
-        }
-        catch (FileNotFoundException error) {
-            System.out.println("No se encontro el archivo: " + error);
-        }
-        catch (IOException error) {
-            System.out.println("Error: " + error);
-        }
-        catch (CsvValidationException error) {
-            System.out.println("Error: " + error);
-        }
-        catch (NoClassDefFoundError error) {
-            System.out.println("Error: " + error);
-        }
+        // Implementation of DB
+        Database.createUser(user);
     }
 
     public static String verifyUserType(String username) {
@@ -88,7 +51,7 @@ public class SystemUser extends Person {
     }
 
     public static boolean verifyUserExist(String username) {
-        getUsers();
+        systemUsers = Database.getUsers();
         for (int i = 0; i < systemUsers.size(); i++) {
             if (username.equals(systemUsers.get(i)[0])) {
                 return true;
@@ -103,5 +66,17 @@ public class SystemUser extends Person {
 
     private void editSystemUser() {
         // Modifies the permissions or data of a user through the user id
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getUserType() {
+        return this.userType.toString();
     }
 }
