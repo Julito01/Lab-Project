@@ -2,6 +2,7 @@ package vista;
 
 import classes.enumerations.UserTypeEnum;
 import com.github.lgooddatepicker.components.DatePicker;
+import config.Database;
 import model.UserType;
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,6 @@ import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import classes.SystemUser;
-
 
 public class CreateUserFrame extends JDialog {
     private JPanel mainPanel;
@@ -27,6 +27,7 @@ public class CreateUserFrame extends JDialog {
     private DatePicker dateField;
     private CreateUserFrame self;
     private List<UserTypeEnum> userTypes = new ArrayList<UserTypeEnum>();
+    private List<String[]> usersFetched = new ArrayList<String[]>();
 
     public CreateUserFrame(Window owner, String title) {
         super(owner, title);
@@ -62,16 +63,16 @@ public class CreateUserFrame extends JDialog {
 
                 // User validations
                 if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType) && !SystemUser.verifyUserExist(username)) {
-                    SystemUser newUser = new SystemUser(1, username, password1, birthdate, userType);
-                    JOptionPane.showMessageDialog(null, "Usuario creado con exito.");
+                    SystemUser newUser = new SystemUser(username, password1, userType);
+                    JOptionPane.showMessageDialog(null, "Usuario creado con exito.", "Usuario creado", JOptionPane.INFORMATION_MESSAGE);
+                    self.dispose();
                 }
                 else if (username.equals("") || password1.equals("") || password2.equals("") || birthdate == null) {
-                    JOptionPane.showMessageDialog(null, "Faltan completar campos y/o las contraseñas no coinciden.");
+                    JOptionPane.showMessageDialog(null, "Faltan completar campos y/o las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 else if (SystemUser.verifyUserExist(username)) {
-                    JOptionPane.showMessageDialog(null, "El usuario ingresado ya existe.");
+                    JOptionPane.showMessageDialog(null, "El usuario ingresado ya existe.", "Usuario existente", JOptionPane.WARNING_MESSAGE);
                 }
-                self.dispose();
             }
         });
     }
