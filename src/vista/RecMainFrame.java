@@ -1,6 +1,7 @@
 package vista;
 
 import classes.Patient;
+import classes.Petition;
 import com.github.lgooddatepicker.components.DatePicker;
 
 import javax.swing.*;
@@ -95,16 +96,21 @@ public class RecMainFrame extends JFrame {
             }
         });
 
-        // Event to create the petition and the pacient
+        // Event to create the petition and the pacient (if it doesn't exists already)
         createPetitionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                // Patient data
                 String patientId = dniField.getText();
                 String patientName = nameField.getText();
                 String patientAddress = addressField.getText();
                 String patientMail = emailField.getText();
                 String patientGenre = genreBoxField.getSelectedItem().toString();
                 String patientAge = ageField.getText();
+
+                // Petition data
+                int petitionId = Petition.getPetitionId();
+
 
                 Patient patient = new Patient(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge);
             }
