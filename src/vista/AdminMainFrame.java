@@ -8,7 +8,6 @@ import java.awt.event.MouseMotionAdapter;
 
 public class AdminMainFrame extends JFrame {
     private JPanel mainPanel;
-    private JLabel userLabel;
     private JLabel passLabel;
     private JPanel header;
     private JPanel exitButton;
@@ -20,10 +19,15 @@ public class AdminMainFrame extends JFrame {
     private JPanel petitionTab;
     private JPanel resultTab;
     private JPanel userTab;
+    private JLabel accountLabel;
+    private JSeparator accountSeparator;
+    private JPanel accountButton;
     private int xMouse, yMouse;
+    private AdminMainFrame self;
 
 
     public AdminMainFrame() {
+        this.self = this;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(1280, 800);
@@ -32,6 +36,7 @@ public class AdminMainFrame extends JFrame {
         this.setUndecorated(true);
         this.bindEvents();
         exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        accountLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.setLocationRelativeTo(null);
     }
 
@@ -71,6 +76,27 @@ public class AdminMainFrame extends JFrame {
             public void mouseExited(MouseEvent e) {
                 exitButton.setBackground(LoginFrame.bgColor);
                 exitLabel.setForeground(Color.white);
+            }
+        });
+
+        // Event to change the color of the underline's account label
+        accountLabel.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                accountSeparator.setForeground(Color.white);
+            }
+        });
+        accountLabel.addMouseListener(new MouseAdapter() {
+            public void mouseExited(MouseEvent e) {
+                accountSeparator.setForeground(Color.black);
+            }
+        });
+
+        accountLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                LoginFrame frame = new LoginFrame("App Laboratorios");
+                frame.setVisible(true);
+                self.dispose();
             }
         });
     }
