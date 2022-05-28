@@ -96,7 +96,7 @@ public class RecMainFrame extends JFrame {
             }
         });
 
-        // Event to create the petition and the pacient (if it doesn't exists already)
+        // Event to create the petition and the patient (if it doesn't exist already)
         createPetitionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
