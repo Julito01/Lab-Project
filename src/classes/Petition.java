@@ -9,6 +9,7 @@ public class Petition {
     private Date deliverDate;
     private ArrayList practices;
     private boolean petitionCompleted;
+    private static int counter = 1;
 
     public Petition(int petitionId, String medInsurance, Date loadDate, Date deliverDate, ArrayList practices, boolean petitionCompleted) {
         this.petitionId = petitionId;
@@ -17,6 +18,7 @@ public class Petition {
         this.deliverDate = deliverDate;
         this.practices = practices;
         this.petitionCompleted = petitionCompleted;
+        this.counter++;
     }
 
     public static void main(String[] args) {
@@ -33,6 +35,10 @@ public class Petition {
 
     private void editPetition() {
         // Modifies the data of a petition through the petition id
+    }
+
+    public static int getPetitionId() {
+        return counter;
     }
 
 
