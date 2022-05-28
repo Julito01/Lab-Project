@@ -11,8 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public class RecMainFrame extends JFrame {
-    // El recepcionista carga las PETICIONES y puede consultar los RESULTADOS
-    // Posible implementación de base de datos
+    // The RECEPTIONIST loads the PETITIONS and can check the RESULTS
     private JPanel mainPanel;
     private JTabbedPane optionsPane;
     private JPanel resultTab;
