@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
     private JSeparator passSeparator;
     private LoginFrame self;
     private int xMouse, yMouse;
-    public static Color bgColor = new Color(0x123456);
+    public static Color bgColor = new Color(0x459aad);
 
     //Color verde 45932F
     public LoginFrame(String title) {
@@ -35,6 +35,23 @@ public class LoginFrame extends JFrame {
         this.self = this;
         this.setUndecorated(true);
         this.getContentPane().setBackground(bgColor);
+
+        // Edit of the top bar exit button behavior
+        this.exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        /* Edit of the inputs */
+        // Username input
+        this.userField.setText("Ingrese su nombre de usuario...");
+        this.userField.setForeground(Color.gray);
+        this.userField.setBackground(bgColor);
+        this.userField.setBorder(BorderFactory.createEmptyBorder());
+
+        // Password input
+        this.passField.setText("********");
+        this.passField.setForeground(Color.gray);
+        this.passField.setBackground(bgColor);
+        this.passField.setBorder(BorderFactory.createEmptyBorder());
+
         this.setLocationRelativeTo(null); // center the app when starts
 //        this.pack();
     }
@@ -45,24 +62,6 @@ public class LoginFrame extends JFrame {
 
 //        ImageIcon image = new ImageIcon("logo.png");
 //        frame.setIconImage(image.getImage());
-
-        // Edit of the top bar exit button behavior
-        frame.exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-
-        /* Edit of the inputs */
-        // Username input
-        frame.userField.setText("Ingrese su nombre de usuario...");
-        frame.userField.setForeground(Color.gray);
-        frame.userField.setBackground(bgColor);
-        frame.userField.setBorder(BorderFactory.createEmptyBorder());
-
-
-        // Password input
-        frame.passField.setText("********");
-        frame.passField.setForeground(Color.gray);
-        frame.passField.setBackground(bgColor);
-        frame.passField.setBorder(BorderFactory.createEmptyBorder());
     }
 
     private void verifyLogin() {
@@ -127,7 +126,21 @@ public class LoginFrame extends JFrame {
                     userField.setText("");
                     userField.setForeground(Color.white);
                 }
+                // Password input behavior
+                if (String.valueOf(passField.getPassword()).isEmpty()) {
+                    passField.setText("********");
+                    passField.setForeground(Color.gray);
+                }
+            }
+        });
 
+        userField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                // User input behavior
+                if (userField.getText().equals("Ingrese su nombre de usuario...")) {
+                    userField.setText("");
+                    userField.setForeground(Color.white);
+                }
                 // Password input behavior
                 if (String.valueOf(passField.getPassword()).isEmpty()) {
                     passField.setText("********");
@@ -144,7 +157,21 @@ public class LoginFrame extends JFrame {
                     passField.setText("");
                     passField.setForeground(Color.white);
                 }
+                // User input behavior
+                if (userField.getText().isEmpty()) {
+                    userField.setText("Ingrese su nombre de usuario...");
+                    userField.setForeground(Color.gray);
+                }
+            }
+        });
 
+        passField.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                // Password input behavior
+                if (String.valueOf(passField.getPassword()).equals("********")) {
+                    passField.setText("");
+                    passField.setForeground(Color.white);
+                }
                 // User input behavior
                 if (userField.getText().isEmpty()) {
                     userField.setText("Ingrese su nombre de usuario...");
@@ -159,11 +186,10 @@ public class LoginFrame extends JFrame {
                 String userInput = userField.getText();
                 String passInput = String.valueOf(passField.getPassword());
 
-                if (userInput.equals("") || passInput.equals("")) {
+                if (userInput.equals("") || passInput.equals("") || userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
                     JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
-                } else if (userInput.equals("Ingrese su nombre de usuario...") || passInput.equals("********")) {
-                    JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
-                } else {
+                }
+                else {
                     String username = userField.getText();
                     String password = String.valueOf(passField.getPassword());
                     System.out.println("Usuario: " + username + "\nContraseña: " + password);

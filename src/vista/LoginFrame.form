@@ -46,7 +46,7 @@
           </grid>
         </constraints>
         <properties>
-          <selectionColor color="-15584170"/>
+          <selectionColor color="-986896"/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
       </component>
@@ -79,7 +79,7 @@
           </grid>
         </constraints>
         <properties>
-          <selectionColor color="-15584170"/>
+          <selectionColor color="-986896"/>
           <text value=""/>
           <verifyInputWhenFocusTarget value="false"/>
         </properties>
@@ -90,7 +90,8 @@
           <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-15584170"/>
+          <background color="-12215635"/>
+          <enabled value="true"/>
         </properties>
         <border type="none"/>
         <children>
@@ -102,7 +103,7 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-15584170"/>
+              <background color="-12215635"/>
             </properties>
             <border type="none"/>
             <children>
