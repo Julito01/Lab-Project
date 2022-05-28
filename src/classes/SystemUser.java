@@ -35,8 +35,7 @@ public class SystemUser extends Person {
     }
 
     private void createSystemUser(SystemUser user) {
-        // Creates a new user in the system and adds it to users.csv
-        // Implementation of DB
+        // Creates a new user and adds it to the database
         Database.createUser(user);
     }
 
