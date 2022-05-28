@@ -1,5 +1,5 @@
 # Laboratory project
-This is a project of a Clinical analisys laboratory. Done with: Java + Swing + mySql.
+This is a project of a Clinical analysis laboratory. Done with: Java + Swing + mySql.
 ## App features:
 ```
 -CRUD of:
