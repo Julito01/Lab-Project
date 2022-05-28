@@ -17,5 +17,3 @@ CREATE TABLE IF NOT EXISTS LabDB.patients (
     age varchar(3) NULL,
     CONSTRAINT Pk_Patient PRIMARY KEY (patientId, name)
 );
-
-
