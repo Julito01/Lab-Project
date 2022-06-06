@@ -1,7 +1,10 @@
 package config;
 
 import classes.Patient;
+import classes.Petition;
+import classes.Practice;
 import classes.SystemUser;
+import com.mysql.cj.protocol.Resultset;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ public class Database {
             String sql = "INSERT INTO patients (patientId, name, address, mail, genre, age)" +
                     "VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, patient.getId());
+            stmt.setString(1, patient.getPatientId());
             stmt.setString(2, patient.getName());
             stmt.setString(3, patient.getAddress());
             stmt.setString(4, patient.getMail());
@@ -76,5 +79,81 @@ public class Database {
         catch (Exception error) {
             System.out.println("Error: " + error);
         }
+    }
+
+    public static void createPetition(Petition petition) {
+        try {
+            createConnection();
+            String sql = "INSERT INTO petitions (ID_Peticion, Fecha_Carga, Fecha_Entrega)" +
+                    "VALUES (?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, petition.getPetitionId());
+            stmt.setString(2, petition.getLoadDate());
+            stmt.setString(3, petition.getEtaDate());
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error");
+        }
+    }
+
+    public static void createPacientPetition(Patient patient, Petition petition, int practId) {
+        try {
+            createConnection();
+            String sql = "INSERT INTO pacients_petitions (ID_Paciente, ID_Peticion, ID_Practica)" +
+                    "VALUES (?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, patient.getPatientId());
+            stmt.setInt(2, petition.getPetitionId());
+            stmt.setInt(3, practId);
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error");
+        }
+    }
+
+    public static int getPracticeId(String practiceName) {
+        StringBuilder sql = new StringBuilder();
+        int practiceId = 0;
+        try {
+            createConnection();
+            Statement stm = con.createStatement();
+            sql.append("SELECT ID_Practica FROM Practice WHERE Nombre = ");
+            sql.append(practiceName);
+            ResultSet result = stm.executeQuery(sql.toString());
+
+            while (result.next()) {
+                practiceId = result.getInt(1);
+            }
+            con.close();
+        } catch (Exception error) {
+            System.out.println("Error");
+        }
+        return practiceId;
+    }
+
+    public static void createPractice() {
+        try {
+            createConnection();
+            String sql = "INSERT INTO Practicas (ID_Practica, Cod_Practica, Nombre)" +
+                    "VALUES (?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, Practice.getPracticeId());
+            stmt.setInt(2, Practice.getPracticeCode());
+            stmt.setString(3, Practice.getPracticeName());
+            con.close();
+        }
+        catch (Exception e) {
+            System.out.println("Error");
+        }
+    }
+
+    public static void deletePractice() {
+        // Something
+    }
+
+    public static void editPractice() {
+        // Something
     }
 }
