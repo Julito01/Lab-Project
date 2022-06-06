@@ -190,12 +190,10 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
                 }
                 else {
-                    String username = userField.getText();
-                    String password = String.valueOf(passField.getPassword());
-                    System.out.println("Usuario: " + username + "\nContraseña: " + password);
-                    if (SystemUser.verifyUserExist(username)) {
+                    System.out.println("Usuario: " + userInput + "\nContraseña: " + userInput);
+                    if (SystemUser.verifyUserExist(userInput)) {
                         self.dispose();
-                        String userType = SystemUser.verifyUserType(username);
+                        String userType = SystemUser.verifyUserType(userInput);
                         System.out.println("Tipo de usuario: " + userType);
                         if (userType.equals("ADMINISTRADOR")) {
                             AdminMainFrame frame = new AdminMainFrame();
