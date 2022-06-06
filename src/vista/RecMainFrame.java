@@ -2,13 +2,17 @@ package vista;
 
 import classes.Patient;
 import classes.Petition;
+import classes.Practice;
 import com.github.lgooddatepicker.components.DatePicker;
+import config.Database;
 
+import javax.swing.Timer;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecMainFrame extends JFrame {
     // The RECEPTIONIST loads the PETITIONS and can check the RESULTS
@@ -32,15 +36,22 @@ public class RecMainFrame extends JFrame {
     private JLabel ageLabel;
     private JTextField ageField;
     private JLabel medInsLabel;
-    private JTextField textField2;
     private JLabel loadDateLabel;
     private DatePicker loadDateField;
     private JLabel practLabel;
     private JComboBox practField;
     private JLabel etaLabel;
     private JTextField etaField;
-    private JLabel practAddedLabel;
     private JButton createPetitionButton;
+    private JComboBox medInsField;
+    private JPanel accountButton;
+    private JLabel accountLabel;
+    private JSeparator accountSeparator;
+    private JLabel addLabel;
+    private JLabel practAddedLabel;
+    private JButton addPractButton;
+    private List<String> practicesArray = new ArrayList<>();
+    private RecMainFrame self;
     private int xMouse, yMouse;
 
     public RecMainFrame() {
@@ -53,6 +64,9 @@ public class RecMainFrame extends JFrame {
         this.bindEvents();
         exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.etaField.setEditable(false);
+        this.addLabel.setText("<html><u>Agregar</u></html>");
+        this.addLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.self = this;
         this.setLocationRelativeTo(null);
     }
 
@@ -95,6 +109,39 @@ public class RecMainFrame extends JFrame {
             }
         });
 
+        // Event to change the color of the underline's account label
+        accountLabel.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                accountSeparator.setForeground(Color.white);
+            }
+        });
+        accountLabel.addMouseListener(new MouseAdapter() {
+            public void mouseExited(MouseEvent e) {
+                accountSeparator.setForeground(Color.black);
+            }
+        });
+
+        addLabel.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                if (!practField.getSelectedItem().equals("...")) {
+                    System.out.println(practField.getSelectedItem());
+                    practAddedLabel.setText("Práctica agregada.");
+                    startCountdownFromNow();
+                    int practIndex = practField.getSelectedIndex();
+                    practField.removeItemAt(practIndex);
+                }
+            }
+        });
+
+        accountLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                LoginFrame frame = new LoginFrame("App Laboratorios");
+                frame.setVisible(true);
+                self.dispose();
+            }
+        });
+
         // Event to create the petition and the patient (if it doesn't exist already)
         createPetitionButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -108,11 +155,26 @@ public class RecMainFrame extends JFrame {
                 String patientAge = ageField.getText();
 
                 // Petition data
-                int petitionId = Petition.getPetitionId();
-
+                String medInsurance = medInsField.getSelectedItem().toString();
+                LocalDate loadDate = loadDateField.getDate();
+                List<String> practices = practicesArray;
 
                 Patient patient = new Patient(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge);
+                Petition petition = new Petition(medInsurance, loadDate, practices);
+                int practId = Practice.getCurrPracticeId(practField.getSelectedItem().toString());
+                Practice.setPracticePetition(patient, petition,practId);
             }
         });
+    }
+
+    private void startCountdownFromNow() {
+        Timer t = new Timer(1050, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                practAddedLabel.setText("");
+            }
+        });
+        t.setRepeats(false);
+        t.start();
     }
 }
