@@ -1,14 +1,6 @@
 package classes;
 import classes.enumerations.UserTypeEnum;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvValidationException;
 import config.Database;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +12,7 @@ public class SystemUser extends Person {
     private LocalDate birthdate;
     private static UserTypeEnum userType;
     private static SystemUser self;
-    private static String csvPath = "/Users/julito/Documents/Tecnicatura de Software/Paradigma Orientado a Objetos/Projecto-Laboratorio/users.csv";
-    private static List<String[]> systemUsers = new ArrayList<String[]>();
+    private static List<String[]> systemUsers = new ArrayList<>();
 
     public SystemUser() {}
 
