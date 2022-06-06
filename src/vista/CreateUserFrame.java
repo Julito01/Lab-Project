@@ -39,7 +39,7 @@ public class CreateUserFrame extends JDialog {
         this.setResizable(false);
         this.setModal(true);
         this.self = this;
-        this.asociarEventos();
+        this.bindEvents();
 
         // Adding the user types to the user type field
         userTypes.add(UserTypeEnum.ADMINISTRADOR);
@@ -52,7 +52,7 @@ public class CreateUserFrame extends JDialog {
         this.setLocationRelativeTo(null);
     }
 
-    private void asociarEventos() {
+    private void bindEvents() {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,8 +62,9 @@ public class CreateUserFrame extends JDialog {
                 LocalDate birthdate = dateField.getDate();
                 UserTypeEnum userType = (UserTypeEnum)userTypeField.getSelectedItem();
 
-                UserController.createUser(username, password1, password2, birthdate, userType);
-                self.dispose();
+                if (UserController.createUser(username, password1, password2, birthdate, userType)) {
+                    self.dispose();
+                }
             }
         });
     }
