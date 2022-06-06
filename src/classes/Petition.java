@@ -1,32 +1,33 @@
 package classes;
 
+import config.Database;
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Petition {
     private int petitionId;
-    private String medInsurance;
-    private Date loadDate;
-    private Date deliverDate;
-    private ArrayList practices;
+    private static String medInsurance;
+    private static LocalDate loadDate;
+    private static LocalDate deliverDate;
+    private List<String> practices;
     private boolean petitionCompleted;
     private static int counter = 1;
 
-    public Petition(int petitionId, String medInsurance, Date loadDate, Date deliverDate, ArrayList practices, boolean petitionCompleted) {
-        this.petitionId = petitionId;
+    public Petition(String medInsurance, LocalDate loadDate, List<String> practices) {
+        this.petitionId = this.counter;
         this.medInsurance = medInsurance;
         this.loadDate = loadDate;
-        this.deliverDate = deliverDate;
         this.practices = practices;
-        this.petitionCompleted = petitionCompleted;
+        this.deliverDate = getDeliveryDate(this.loadDate, this.practices);
+        this.petitionCompleted = false;
+        createPetition(this);
         this.counter++;
     }
 
-    public static void main(String[] args) {
-        // TO DO something
-    }
-
-    private void createPetition() {
-        // Creates a new petition
+    private void createPetition(Petition petition) {
+        Database.createPetition(petition);
     }
 
     private void deletePetition() {
@@ -41,5 +42,23 @@ public class Petition {
         return counter;
     }
 
+    public static String getMedInsurance() {
+        return medInsurance;
+    }
+
+    public static String getLoadDate() {
+        return loadDate.toString();
+    }
+
+    public static String getEtaDate() {
+        return deliverDate.toString();
+    }
+
+    private static LocalDate getDeliveryDate(LocalDate date, List<String> practicesArray) {
+        for (int i = 0; i < practicesArray.size(); i++) {
+            date.plusDays(2);
+        }
+        return date;
+    }
 
 }
