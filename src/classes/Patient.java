@@ -1,11 +1,5 @@
 package classes;
-
-import com.opencsv.CSVWriter;
 import config.Database;
-
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class Patient extends Person {
     private String patientId;
@@ -38,7 +32,7 @@ public class Patient extends Person {
         // Modifies the data of a desired patient through the patient id
     }
 
-    public String getId() {
+    public String getPatientId() {
         return this.patientId;
     }
 
