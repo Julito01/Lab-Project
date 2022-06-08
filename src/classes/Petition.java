@@ -1,9 +1,8 @@
 package classes;
 
 import config.Database;
-import controllers.PracticeController;
+import dtos.PracticeDTO;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -12,11 +11,11 @@ public class Petition {
     private static String medInsurance;
     private static LocalDate loadDate;
     private static LocalDate deliverDate;
-    private static List<String> practices;
+    private static List<PracticeDTO> practices;
     private boolean petitionCompleted;
     private static int counter = 1;
 
-    public Petition(String medInsurance, LocalDate loadDate, List<String> practices) {
+    public Petition(String medInsurance, LocalDate loadDate, List<PracticeDTO> practices) {
         this.petitionId = this.counter;
         this.medInsurance = medInsurance;
         this.loadDate = loadDate;
@@ -62,7 +61,7 @@ public class Petition {
         return deliverDate.toString();
     }
 
-    private static LocalDate getDeliveryDate(LocalDate date, List<String> practicesArray) {
+    private static LocalDate getDeliveryDate(LocalDate date, List<PracticeDTO> practicesArray) {
         for (int i = 0; i < practicesArray.size(); i++) {
             date.plusDays(2);
         }
