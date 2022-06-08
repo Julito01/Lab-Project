@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS LabDB.practices (
     practiceId int AUTO_INCREMENT NOT NULL,
     practiceCode int NOT NULL,
     practiceName varchar(255) NOT NULL,
+    practiceLength datetime NOT NULL,
     PRIMARY KEY (practiceId)
 );
 
