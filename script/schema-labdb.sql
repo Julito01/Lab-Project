@@ -17,3 +17,27 @@ CREATE TABLE IF NOT EXISTS LabDB.patients (
     age varchar(3) NULL,
     CONSTRAINT Pk_Patient PRIMARY KEY (patientId, name)
 );
+
+CREATE TABLE IF NOT EXISTS LabDB.petitions (
+    petitionId int AUTO_INCREMENT NOT NULL,
+    loadDate datetime NOT NULL,
+    deliveryDate datetime NOT NULL,
+    PRIMARY KEY (petitionId)
+);
+
+CREATE TABLE IF NOT EXISTS LabDB.practices (
+    practiceId int AUTO_INCREMENT NOT NULL,
+    practiceCode int NOT NULL,
+    practiceName varchar(255) NOT NULL,
+    PRIMARY KEY (practiceId)
+);
+
+CREATE TABLE IF NOT EXISTS LabDB.petitions_patients (
+    patientId int NOT NULL,
+    petitionId int NOT NULL,
+    practiceId int NOT NULL,
+    CONSTRAINT PK_Petition_Patient PRIMARY KEY (patientId, petitionId, practiceId),
+    FOREIGN KEY (patientId) REFERENCES patients(patientId),
+    FOREIGN KEY (petitionId) REFERENCES petitions(petitionId),
+    FOREIGN KEY (practiceId) REFERENCES practices(practiceId)
+);
