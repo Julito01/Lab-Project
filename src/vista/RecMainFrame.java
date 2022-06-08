@@ -1,11 +1,12 @@
 package vista;
 
-import classes.Patient;
-import classes.Petition;
 import classes.Practice;
 import com.github.lgooddatepicker.components.DatePicker;
-import config.Database;
-
+import controllers.PatientController;
+import controllers.PetitionController;
+import dtos.PatientDTO;
+import dtos.PetitionDTO;
+import dtos.PracticeDTO;
 import javax.swing.Timer;
 import javax.swing.*;
 import java.awt.*;
@@ -50,12 +51,16 @@ public class RecMainFrame extends JFrame {
     private JLabel addLabel;
     private JLabel practAddedLabel;
     private JButton addPractButton;
-    private List<String> practicesArray = new ArrayList<>();
+    private List<PracticeDTO> practicesArray = new ArrayList<>();
     private RecMainFrame self;
+    private PatientController patInstance;
+    private PetitionController petInstance;
     private int xMouse, yMouse;
 
     public RecMainFrame() {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.patInstance = PatientController.getInstance();
+        this.petInstance = PetitionController.getInstance();
         this.setContentPane(mainPanel);
         this.setSize(1280, 800);
         this.getContentPane().setBackground(LoginFrame.bgColor);
@@ -126,6 +131,7 @@ public class RecMainFrame extends JFrame {
                 if (!practField.getSelectedItem().equals("...")) {
                     System.out.println(practField.getSelectedItem());
                     practAddedLabel.setText("Práctica agregada.");
+                    practicesArray.add((PracticeDTO) practField.getSelectedItem());
                     startCountdownFromNow();
                     int practIndex = practField.getSelectedIndex();
                     practField.removeItemAt(practIndex);
@@ -157,12 +163,12 @@ public class RecMainFrame extends JFrame {
                 // Petition data
                 String medInsurance = medInsField.getSelectedItem().toString();
                 LocalDate loadDate = loadDateField.getDate();
-                List<String> practices = practicesArray;
+                List<PracticeDTO> practices = practicesArray;
 
-                Patient patient = new Patient(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge);
-                Petition petition = new Petition(medInsurance, loadDate, practices);
+                patInstance.setPatient(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge);
+                petInstance.setPetition(medInsurance, loadDate, practices);
                 int practId = Practice.getCurrPracticeId(practField.getSelectedItem().toString());
-                Practice.setPracticePetition(patient, petition,practId);
+
             }
         });
     }
