@@ -4,6 +4,7 @@ import classes.Patient;
 import classes.Petition;
 import classes.Practice;
 import classes.SystemUser;
+import dtos.PatientDTO;
 
 import java.sql.*;
 import java.util.*;
@@ -15,8 +16,7 @@ public class Database {
     private static Connection con;
     private static List<String[]> users = new ArrayList<>();
     private static List<String> practices = new ArrayList<>();
-    private static List<Patient> patients = new ArrayList<>();
-
+    private static List<PatientDTO> patients = new ArrayList<>();
 
     public static void createConnection() throws SQLException {
         try {
@@ -91,20 +91,20 @@ public class Database {
             Statement stm = con.createStatement();
             sql.append("DELETE FROM patients WHERE patientId = ");
             sql.append(patientId);
-            ResultSet result = stm.executeQuery(sql.toString());
+            stm.executeUpdate(sql.toString());
         }
         catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
 
-    public static List<Patient> getAllPatients() {
+    public static List<PatientDTO> getAllPatients() {
         try {
             createConnection();
             Statement stm = con.createStatement();
             ResultSet result = stm.executeQuery("SELECT * FROM patients");
             while (result.next()) {
-                Patient patient = new Patient(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6));
+                PatientDTO patient = new PatientDTO(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6));
                 patients.add(patient);
             }
             con.close();
@@ -182,9 +182,9 @@ public class Database {
             String sql = "INSERT INTO petitions (ID_Peticion, Fecha_Carga, Fecha_Entrega)" +
                     "VALUES (?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, Petition.getPetitionId());
-            stmt.setString(2, Petition.getLoadDate());
-            stmt.setString(3, Petition.getEtaDate());
+            stmt.setInt(1, petition.getPetitionId());
+            stmt.setString(2, petition.getLoadDate());
+            stmt.setString(3, petition.getEtaDate());
             con.close();
         }
         catch (Exception error) {
