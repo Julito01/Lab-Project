@@ -15,11 +15,9 @@ public class PatientController {
         return pcObject;
     }
 
-
     public boolean setPatient(String patientId, String name, String address, String email, String genre, String age) {
         if (verifyPatientId(patientId) && verifyName(name) && verifyAddress(address) && verifyEmail(email) && verifyAge(age)) {
             PatientDTO patientDTO = new PatientDTO(patientId, name, address, email, genre, age);
-            PatientDTO.createPatient(patientDTO);
             AdminMainFrame.setDefaultValuesArray(patientDTO);
             return true;
         }
