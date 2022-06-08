@@ -37,13 +37,12 @@ public class Practice {
         Database.editPractice();
     }
 
-    public static void setPracticePetition(Patient patient, Petition petition, int practId) {
-        Database.createPacientPetition(patient, petition, practId);
+    public static int getCurrPracticeId(String practiceName) {
+        return Database.getPracticeId(practiceName);
     }
 
-    public static int getCurrPracticeId(String practiceName) {
-        int practiceData = Database.getPracticeId(practiceName);
-        return practiceData;
+    public static List<String> getAllPractices() {
+        return Database.getPractices();
     }
 
     public static int getPracticeId() {
