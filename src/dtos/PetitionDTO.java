@@ -5,6 +5,7 @@ import classes.Practice;
 import config.Database;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PetitionDTO {
@@ -12,12 +13,12 @@ public class PetitionDTO {
     private static String medInsurance;
     private static LocalDate loadDate;
     private static LocalDate deliverDate;
-    private static List<String> practices;
+    private static List<PracticeDTO> practices;
     private boolean petitionCompleted;
     private static int counter = 1;
     private PetitionDTO self;
 
-    public PetitionDTO(String medInsurance, LocalDate loadDate, List<String> practices) {
+    public PetitionDTO(String medInsurance, LocalDate loadDate, List<PracticeDTO> practices) {
         this.petitionId = this.counter;
         this.medInsurance = medInsurance;
         this.loadDate = loadDate;
@@ -31,7 +32,7 @@ public class PetitionDTO {
     private void createPetition(PetitionDTO petitionDTO) {
         String medInsurance = petitionDTO.getMedInsurance();
         LocalDate loadDate = petitionDTO.getLoadDate();
-        List<String> practices = petitionDTO.getPractices();
+        List<PracticeDTO> practices = petitionDTO.getPractices();
 
         Petition petition = new Petition(medInsurance, loadDate, practices);
     }
@@ -55,7 +56,7 @@ public class PetitionDTO {
         return counter;
     }
 
-    private static List<String> getPractices() {
+    private static List<PracticeDTO> getPractices() {
         return practices;
     }
 
@@ -71,7 +72,7 @@ public class PetitionDTO {
         return deliverDate;
     }
 
-    private static LocalDate getDeliveryDate(LocalDate date, List<String> practicesArray) {
+    private static LocalDate getDeliveryDate(LocalDate date, List<PracticeDTO> practicesArray) {
         for (int i = 0; i < practicesArray.size(); i++) {
             date.plusDays(2);
         }

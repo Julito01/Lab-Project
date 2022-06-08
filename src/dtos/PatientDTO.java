@@ -22,7 +22,7 @@ public class PatientDTO {
         this.mail = mail;
         this.genre = genre;
         this.age = age;
-        this.self = self;
+        createPatient(this);
     }
 
     public void addPetitions(PetitionDTO petition) {

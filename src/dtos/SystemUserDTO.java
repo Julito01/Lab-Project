@@ -1,22 +1,24 @@
-package classes;
+package dtos;
+import classes.Person;
+import classes.SystemUser;
 import classes.enumerations.UserTypeEnum;
 import config.Database;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDTO extends Person {
+public class SystemUserDTO extends Person {
     private int systemUserId;
     private String username;
     private String password;
     private LocalDate birthdate;
     private static UserTypeEnum userType;
-    private static SystemUser self;
+    private static SystemUserDTO self;
     private static List<String[]> systemUsers = new ArrayList<>();
 
-    public SystemUser() {}
+    public SystemUserDTO() {}
 
-    public SystemUser(String username, String password, UserTypeEnum userType) {
+    public SystemUserDTO(String username, String password, UserTypeEnum userType) {
         super();
         this.username = username;
         this.password = password;
@@ -25,9 +27,13 @@ public class UserDTO extends Person {
         createSystemUser(this);
     }
 
-    private void createSystemUser(SystemUser user) {
+    private void createSystemUser(SystemUserDTO userDTO) {
         // Creates a new user and adds it to the database
-        Database.createUser(user);
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
+        UserTypeEnum userType = userDTO.getUserType();
+
+        SystemUser systemUser = new SystemUser(username, password, userType);
     }
 
     public String verifyUserType(String username) {
@@ -66,8 +72,8 @@ public class UserDTO extends Person {
         return this.password;
     }
 
-    public String getUserType() {
-        return this.userType.toString();
+    public UserTypeEnum getUserType() {
+        return this.userType;
     }
 }
 
