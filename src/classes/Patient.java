@@ -1,6 +1,8 @@
 package classes;
 import config.Database;
 
+import java.util.List;
+
 public class Patient extends Person {
     private String patientId;
     private String name;
@@ -18,9 +20,14 @@ public class Patient extends Person {
         this.genre = genre;
         this.age = age;
         this.self = this;
-        createPatient(this);
     }
-    private void createPatient(Patient patient) {
+
+    public static List<Patient> getPatients() {
+        List<Patient> patients = Database.getAllPatients();
+        return patients;
+    }
+
+    public static void createPatient(Patient patient) {
         Database.createPatient(patient);
     }
 
@@ -32,6 +39,7 @@ public class Patient extends Person {
         // Modifies the data of a desired patient through the patient id
     }
 
+    // Getters
     public String getPatientId() {
         return this.patientId;
     }
