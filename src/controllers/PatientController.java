@@ -1,14 +1,26 @@
 package controllers;
 
-import classes.Patient;
-
-import javax.swing.*;
+import dtos.PatientDTO;
+import vista.AdminMainFrame;
 
 public class PatientController {
-    public static boolean setPatient(String patientId, String name, String address, String email, String genre, String age) {
+    private static PatientController pcObject;
+
+    private PatientController() {}
+
+    public static PatientController getInstance() {
+        if (pcObject == null) {
+            pcObject = new PatientController();
+        }
+        return pcObject;
+    }
+
+
+    public boolean setPatient(String patientId, String name, String address, String email, String genre, String age) {
         if (verifyPatientId(patientId) && verifyName(name) && verifyAddress(address) && verifyEmail(email) && verifyAge(age)) {
-            Patient patient = new Patient(patientId, name, address, email, genre, age);
-            Patient.createPatient(patient);
+            PatientDTO patientDTO = new PatientDTO(patientId, name, address, email, genre, age);
+            PatientDTO.createPatient(patientDTO);
+            AdminMainFrame.setDefaultValuesArray(patientDTO);
             return true;
         }
         else {
@@ -16,8 +28,12 @@ public class PatientController {
         }
     }
 
-    private static boolean verifyPatientId(String id) {
-        if (id.length() > 7) {
+    public void deletePatient(String patientId) {
+        PatientDTO.deletePatient(patientId);
+    }
+
+    private boolean verifyPatientId(String id) {
+        if (id.length() > 0 && id.length() <= 8) {
             return true;
         }
         else {
@@ -25,7 +41,7 @@ public class PatientController {
         }
     }
 
-    private static boolean verifyName(String name) {
+    private boolean verifyName(String name) {
         if (name.length() > 7) {
             return true;
         }
@@ -34,7 +50,7 @@ public class PatientController {
         }
     }
 
-    private static boolean verifyAddress(String address) {
+    private boolean verifyAddress(String address) {
         if (address.length() > 5) {
             return true;
         }
@@ -43,7 +59,7 @@ public class PatientController {
         }
     }
 
-    private static boolean verifyEmail(String email) {
+    private boolean verifyEmail(String email) {
         if (email.length() > 10) {
             return true;
         }
@@ -52,7 +68,7 @@ public class PatientController {
         }
     }
 
-    private static boolean verifyAge(String age) {
+    private boolean verifyAge(String age) {
         int patientAge = Integer.parseInt(age);
         if (patientAge > 0){
             return true;
