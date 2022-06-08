@@ -137,7 +137,6 @@ public class AdminMainFrame extends JFrame {
             }
         });
 
-
         searchPatientField.getDocument().addDocumentListener(new DocumentListener(){
             @Override public void insertUpdate(DocumentEvent e) { filter(); }
             @Override public void removeUpdate(DocumentEvent e) { filter(); }
