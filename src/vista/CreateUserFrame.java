@@ -29,10 +29,11 @@ public class CreateUserFrame extends JDialog {
     private CreateUserFrame self;
     private List<UserTypeEnum> userTypes = new ArrayList<>();
     private List<String[]> usersFetched = new ArrayList<>();
+    private UserController userInstance;
 
     public CreateUserFrame(Window owner, String title) {
         super(owner, title);
-
+        this.userInstance = UserController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(460, 300);
@@ -62,7 +63,7 @@ public class CreateUserFrame extends JDialog {
                 LocalDate birthdate = dateField.getDate();
                 UserTypeEnum userType = (UserTypeEnum)userTypeField.getSelectedItem();
 
-                if (UserController.createUser(username, password1, password2, birthdate, userType)) {
+                if (userInstance.createUser(username, password1, password2, birthdate, userType)) {
                     self.dispose();
                 }
             }
