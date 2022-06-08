@@ -16,6 +16,7 @@ public class Practice {
         practiceId = counter;
         practiceCode = practCodeCounter;
         Practice.practiceName = practiceName;
+        createPractice(this);
         counter++;
         practCodeCounter++;
     }
@@ -25,8 +26,8 @@ public class Practice {
         // return /* something */
     }
 
-    private void createPractice() {
-        Database.createPractice();
+    private void createPractice(Practice practice) {
+        Database.createPractice(practice);
     }
 
     private void deletePractice() {
