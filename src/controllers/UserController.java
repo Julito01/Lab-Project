@@ -2,6 +2,7 @@ package controllers;
 
 import classes.SystemUser;
 import classes.enumerations.UserTypeEnum;
+import dtos.SystemUserDTO;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -23,7 +24,7 @@ public class UserController {
     public boolean createUser(String username, String password1, String password2, LocalDate birthdate, UserTypeEnum userType) {
         // User validations
         if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType) && !SystemUser.verifyUserExist(username)) {
-            SystemUser newUser = new SystemUser(username, password1, userType);
+            SystemUserDTO newUser = new SystemUserDTO(username, password1, userType);
             JOptionPane.showMessageDialog(null, "Usuario creado con exito.", "Usuario creado", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
