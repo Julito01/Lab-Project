@@ -1,6 +1,7 @@
 package classes;
 
 import config.Database;
+import controllers.PracticeController;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ public class Petition {
     private static String medInsurance;
     private static LocalDate loadDate;
     private static LocalDate deliverDate;
-    private List<String> practices;
+    private static List<String> practices;
     private boolean petitionCompleted;
     private static int counter = 1;
 
@@ -28,6 +29,13 @@ public class Petition {
 
     private void createPetition(Petition petition) {
         Database.createPetition(petition);
+    }
+
+    public static void createPatientPetition(String patientId, int petitionId, String practiceName) {
+        for (int i = 0; i < practices.size(); i++) {
+            int practId = Practice.getCurrPracticeId(practiceName);
+            Database.createPatientPetition(patientId, petitionId, practId);
+        }
     }
 
     private void deletePetition() {
