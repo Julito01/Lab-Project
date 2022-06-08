@@ -116,14 +116,14 @@ public class Database {
     }
 
     // Practice's methods
-    public static void createPractice() {
+    public static void createPractice(Practice practice) {
         try {
             createConnection();
             String sql = "INSERT INTO practices (practiceCode, practiceName)" +
                     "VALUES (?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, Practice.getPracticeCode());
-            stmt.setString(2, Practice.getPracticeName());
+            stmt.setInt(1, practice.getPracticeCode());
+            stmt.setString(2, practice.getPracticeName());
             con.close();
         }
         catch (Exception error) {
