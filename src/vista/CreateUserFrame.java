@@ -27,8 +27,8 @@ public class CreateUserFrame extends JDialog {
     private JLabel dateLabel;
     private DatePicker dateField;
     private CreateUserFrame self;
-    private List<UserTypeEnum> userTypes = new ArrayList<UserTypeEnum>();
-    private List<String[]> usersFetched = new ArrayList<String[]>();
+    private List<UserTypeEnum> userTypes = new ArrayList<>();
+    private List<String[]> usersFetched = new ArrayList<>();
 
     public CreateUserFrame(Window owner, String title) {
         super(owner, title);
