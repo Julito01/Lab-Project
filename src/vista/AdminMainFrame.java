@@ -129,7 +129,7 @@ public class AdminMainFrame extends JFrame {
         deletePatientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                PatientDTO patient = (PatientDTO)patientList.getSelectedValue();
+                PatientDTO patient = (PatientDTO) patientList.getSelectedValue();
                 int patientToRemove = patientList.getSelectedIndex();
                 cp.deletePatient(patient.getPatientId());
                 JOptionPane.showMessageDialog(null,"Paciente eliminado con exito.", "Paciente eliminado", JOptionPane.INFORMATION_MESSAGE);
