@@ -1,7 +1,10 @@
 package controllers;
 
+import classes.Patient;
 import dtos.PatientDTO;
 import vista.AdminMainFrame;
+
+import java.util.List;
 
 public class PatientController {
     private static PatientController pcObject;
@@ -26,8 +29,12 @@ public class PatientController {
         }
     }
 
+    public List<PatientDTO> getAllPatients() {
+        return Patient.getAllPatients();
+    }
+
     public void deletePatient(String patientId) {
-        PatientDTO.deletePatient(patientId);
+        Patient.deletePatient(patientId);
     }
 
     private boolean verifyPatientId(String id) {
