@@ -87,7 +87,7 @@
                     <properties>
                       <font size="18" style="0"/>
                       <model/>
-                      <preferredSize width="100" height="0"/>
+                      <preferredSize width="500" height="0"/>
                     </properties>
                   </component>
                 </children>

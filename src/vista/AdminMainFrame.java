@@ -119,6 +119,13 @@ public class AdminMainFrame extends JFrame {
     }
 
     private void bindEvents() {
+        editPatientLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+        });
+
         refreshLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
