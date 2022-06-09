@@ -36,6 +36,7 @@ public class EditPatientFrame extends JDialog {
         this.self = this;
         this.bindEvents();
         setGenreModel();
+        this.setLocationRelativeTo(null);
     }
 
     private void setGenreModel() {
