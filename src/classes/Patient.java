@@ -1,5 +1,8 @@
 package classes;
 import config.Database;
+import dtos.PatientDTO;
+
+import java.util.List;
 
 public class Patient extends Person {
     private String patientId;
@@ -24,12 +27,18 @@ public class Patient extends Person {
         Database.createPatient(patient);
     }
 
-    private void deletePatient() {
+    public static void deletePatient(String patientId) {
         // Deletes a desired patient through the patient id
+        Database.deletePatient(patientId);
     }
 
     private void editPatient() {
         // Modifies the data of a desired patient through the patient id
+    }
+
+    public static List<PatientDTO> getAllPatients() {
+        List<PatientDTO> patients = Database.getAllPatients();
+        return patients;
     }
 
     public String getPatientId() {
