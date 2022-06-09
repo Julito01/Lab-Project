@@ -76,18 +76,22 @@
               <scrollpane id="47607" binding="patientListPanel">
                 <constraints>
                   <grid row="2" column="4" row-span="6" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="-1" height="500"/>
+                    <preferred-size width="500" height="500"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <horizontalScrollBarPolicy value="31"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="eb7f1" class="javax.swing.JList" binding="patientList">
                     <constraints/>
                     <properties>
                       <font size="18" style="0"/>
+                      <maximumSize width="450" height="0"/>
+                      <minimumSize width="450" height="0"/>
                       <model/>
-                      <preferredSize width="500" height="0"/>
+                      <preferredSize width="450" height="0"/>
                     </properties>
                   </component>
                 </children>
