@@ -2,6 +2,8 @@ package dtos;
 
 import classes.Patient;
 import config.Database;
+import controllers.PatientController;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +15,11 @@ public class PatientDTO {
     private String genre;
     private String age;
     private PatientDTO self;
+    private PatientController patInstance;
     private List<PetitionDTO> petitionsArray = new ArrayList<>();
 
     public PatientDTO(String patientId, String name, String address, String mail, String genre, String age) {
+        this.patInstance = PatientController.getInstance();
         this.patientId = patientId;
         this.name = name;
         this.address = address;
@@ -34,12 +38,7 @@ public class PatientDTO {
         return name;
     }
 
-    public static List<PatientDTO> getPatients() {
-        List<PatientDTO> patients = Database.getAllPatients();
-        return patients;
-    }
-
-    public static void createPatient(PatientDTO patientDTO) {
+    public void createPatient(PatientDTO patientDTO) {
         String patientId = patientDTO.getPatientId();
         String name = patientDTO.getName();
         String address = patientDTO.getAddress();
@@ -48,12 +47,11 @@ public class PatientDTO {
         String age = patientDTO.getAge();
 
         Patient patient = new Patient(patientId, name, address, mail, genre, age);
-        Database.createPatient(patient);
     }
 
-    public static void deletePatient(String patientId) {
+    public void deletePatient(String patientId) {
         // Deletes a desired patient through the patient id
-        Database.deletePatient(patientId);
+        patInstance.deletePatient(patientId);
     }
 
     private void editPatient() {
