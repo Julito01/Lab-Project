@@ -164,11 +164,12 @@ public class RecMainFrame extends JFrame {
                 String medInsurance = medInsField.getSelectedItem().toString();
                 LocalDate loadDate = loadDateField.getDate();
                 List<PracticeDTO> practices = practicesArray;
-
-                patInstance.setPatient(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge);
-                petInstance.setPetition(medInsurance, loadDate, practices);
                 int practId = Practice.getCurrPracticeId(practField.getSelectedItem().toString());
+                String practiceName = practField.getSelectedItem().toString();
 
+                patInstance.setPatient(new PatientDTO(patientId, patientName, patientAddress, patientMail, patientGenre, patientAge));
+                petInstance.setPetition(new PetitionDTO(medInsurance, loadDate, practices));
+                petInstance.createPatientPetition(patientId, practId, practiceName, practices);
             }
         });
     }
