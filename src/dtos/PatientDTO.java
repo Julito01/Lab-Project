@@ -39,14 +39,7 @@ public class PatientDTO {
     }
 
     public void createPatient(PatientDTO patientDTO) {
-        String patientId = patientDTO.getPatientId();
-        String name = patientDTO.getName();
-        String address = patientDTO.getAddress();
-        String mail = patientDTO.getMail();
-        String genre = patientDTO.genre;
-        String age = patientDTO.getAge();
-
-        Patient patient = new Patient(patientId, name, address, mail, genre, age);
+        Patient patient = new Patient(patientDTO);
     }
 
     public void deletePatient(String patientId) {
