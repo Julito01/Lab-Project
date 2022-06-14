@@ -13,13 +13,13 @@ public class Patient extends Person {
     private String age;
     private Patient self;
 
-    public Patient(String patientId, String name, String address, String mail, String genre, String age) {
-        this.patientId = patientId;
-        this.name = name;
-        this.address = address;
-        this.mail = mail;
-        this.genre = genre;
-        this.age = age;
+    public Patient(PatientDTO patient) {
+        this.patientId = patient.getPatientId();
+        this.name = patient.getName();
+        this.address = patient.getAddress();
+        this.mail = patient.getMail();
+        this.genre = patient.getGenre();
+        this.age = patient.getAge();
         this.self = this;
         createPatient(this);
     }
