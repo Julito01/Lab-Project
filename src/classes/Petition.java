@@ -1,6 +1,7 @@
 package classes;
 
 import config.Database;
+import dtos.PetitionDTO;
 import dtos.PracticeDTO;
 
 import java.time.LocalDate;
@@ -15,11 +16,11 @@ public class Petition {
     private boolean petitionCompleted;
     private static int counter = 1;
 
-    public Petition(String medInsurance, LocalDate loadDate, List<PracticeDTO> practices) {
+    public Petition(PetitionDTO petition) {
         this.petitionId = this.counter;
-        this.medInsurance = medInsurance;
-        this.loadDate = loadDate;
-        this.practices = practices;
+        this.medInsurance = petition.getMedInsurance();
+        this.loadDate = petition.getLoadDate();
+        this.practices = petition.getPractices();
         this.deliverDate = getDeliveryDate(this.loadDate, this.practices);
         this.petitionCompleted = false;
         createPetition(this);
@@ -37,8 +38,9 @@ public class Petition {
         }
     }
 
-    private void deletePetition() {
+    public static void deletePetition() {
         // Deletes a desired petition through the petition id
+//        Database.deletePetition();
     }
 
     private void editPetition() {
