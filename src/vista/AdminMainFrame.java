@@ -36,11 +36,36 @@ public class AdminMainFrame extends JFrame {
     private JTextField searchPatientField;
     private JLabel searchPatientLabel;
     private JLabel refreshLabel;
-    private List<dtos.PatientDTO> patients = new ArrayList<>();
-    private static List<dtos.PatientDTO> defaultPatientNames = new ArrayList<>();
-    private DefaultListModel<dtos.PatientDTO> listModel = new DefaultListModel<>();
-    private List<dtos.PatientDTO> patientsArray = new ArrayList<>();
-    private boolean firstQuery = true;
+    private JLabel addStationLabel;
+    private JLabel deleteStationLabel;
+    private JLabel editStationLabel;
+    private JTextField stationField;
+    private JLabel addressStationLabel;
+    private JLabel refreshStationLabel;
+    private JLabel addPracticeLabel;
+    private JLabel deletePracticeLabel;
+    private JLabel editPracticeLabel;
+    private JTextField practiceField;
+    private JLabel practiceLabel;
+    private JLabel refreshPractLabel;
+    private JLabel addPetitionLabel;
+    private JLabel deletePetitionLabel;
+    private JLabel editPetitionLabel;
+    private JTextField petitionField;
+    private JLabel petitionLabel;
+    private JLabel addResultLabel;
+    private JLabel deleteResultLabel;
+    private JLabel editResultLabel;
+    private JTextField resultField;
+    private JLabel resultLabel;
+    private JLabel refreshResultLabel;
+    private JLabel addUserLabel;
+    private JLabel deleteUserLabel;
+    private List<PatientDTO> patients = new ArrayList<>();
+    private static List<PatientDTO> defaultPatient = new ArrayList<>();
+    private DefaultListModel<PatientDTO> listModel = new DefaultListModel<>();
+    private List<PatientDTO> patientsArray = new ArrayList<>();
+    private static boolean firstQuery = true;
     private PatientController patInstance;
     private int xMouse, yMouse;
     private AdminMainFrame self;
@@ -61,7 +86,7 @@ public class AdminMainFrame extends JFrame {
         addPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         deletePatientLabel.setText("<html><u>Eliminar paciente</u></html>");
         deletePatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        editPatientLabel.setText("<html><u>Modificar paciente</u></html>");
+        editPatientLabel.setText("<html><u>Editar paciente</u></html>");
         editPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshLabel.setText("<html><u>Refrescar</u></html>");
         refreshLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -69,30 +94,30 @@ public class AdminMainFrame extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public static void setDefaultValuesArray(dtos.PatientDTO patient) {
-        defaultPatientNames.add(patient);
+    public static void setDefaultValuesArray(PatientDTO patient) {
+        defaultPatient.add(patient);
     }
 
     public DefaultListModel<PatientDTO> displayPatients() {
-        patientsArray = patInstance.getAllPatients();
         if (firstQuery) {
+            patientsArray = patInstance.getAllPatients();
             for (PatientDTO patientDTO : patientsArray) {
-                defaultPatientNames.add(patientDTO);
+                defaultPatient.add(patientDTO);
                 listModel.addElement(patientDTO);
             }
             firstQuery = false;
         }
         else {
             listModel.removeAllElements();
-            for (PatientDTO defaultPatientName : defaultPatientNames) {
-                listModel.addElement(defaultPatientName);
+            for (PatientDTO patient : defaultPatient) {
+                listModel.addElement(patient);
             }
         }
         return listModel;
     }
 
     public void filterModel(DefaultListModel<PatientDTO> model, String filter) {
-        for (PatientDTO s : defaultPatientNames) {
+        for (PatientDTO s : defaultPatient) {
             if (!s.toString().startsWith(filter)) {
                 if (model.contains(s)) {
                     model.removeElement(s);
@@ -117,7 +142,7 @@ public class AdminMainFrame extends JFrame {
         editPatientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                EditPatientFrame frame = new EditPatientFrame(self, "Editar paciente");
+                EditPatientFrame frame = new EditPatientFrame(self, "Editar paciente", (PatientDTO)patientList.getSelectedValue());
                 frame.setVisible(true);
             }
         });
@@ -137,6 +162,7 @@ public class AdminMainFrame extends JFrame {
                 patInstance.deletePatient(patientDTO.getPatientId());
                 JOptionPane.showMessageDialog(null,"Paciente eliminado con exito.", "Paciente eliminado", JOptionPane.INFORMATION_MESSAGE);
                 listModel.remove(patientToRemove);
+                defaultPatient.remove(patientToRemove);
             }
         });
 
