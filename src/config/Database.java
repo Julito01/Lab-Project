@@ -34,11 +34,11 @@ public class Database {
             createConnection();
             String sql = "INSERT INTO users (username, password, userType)" +
                     "VALUES (?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getUserType());
-            stmt.executeUpdate();
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, user.getUsername());
+            stm.setString(2, user.getPassword());
+            stm.setString(3, user.getUserType());
+            stm.executeUpdate();
             con.close();
         }
         catch (Exception error) {
@@ -49,8 +49,8 @@ public class Database {
     public static List<String[]> getUsers() {
         try {
             createConnection();
-            Statement statement = con.createStatement();
-            ResultSet result = statement.executeQuery("SELECT * FROM users;");
+            Statement stm = con.createStatement();
+            ResultSet result = stm.executeQuery("SELECT * FROM users;");
             while (result.next()) {
                 String[] currentUser = {result.getString(2), result.getString(3), result.getString(4)};
                 users.add(currentUser);
@@ -67,16 +67,17 @@ public class Database {
     public static void createPatient(Patient patient) {
         try {
             createConnection();
-            String sql = "INSERT INTO patients (patientId, name, address, mail, genre, age)" +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, patient.getPatientId());
-            stmt.setString(2, patient.getName());
-            stmt.setString(3, patient.getAddress());
-            stmt.setString(4, patient.getMail());
-            stmt.setString(5, patient.getGenre());
-            stmt.setString(6, patient.getAge());
-            stmt.executeUpdate();
+            String sql = "INSERT INTO patients (patientId, dni, name, address, mail, genre, age)" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, patient.getPatientId());
+            stm.setString(2, patient.getPatientDni());
+            stm.setString(3, patient.getName());
+            stm.setString(4, patient.getAddress());
+            stm.setString(5, patient.getMail());
+            stm.setString(6, patient.getGenre());
+            stm.setString(7, patient.getAge());
+            stm.executeUpdate();
             con.close();
         }
         catch (Exception error) {
@@ -84,7 +85,7 @@ public class Database {
         }
     }
 
-    public static void deletePatient(String patientId) {
+    public static void deletePatient(int patientId) {
         StringBuilder sql = new StringBuilder();
         try {
             createConnection();
@@ -98,13 +99,33 @@ public class Database {
         }
     }
 
+    public static void updatePatient(PatientDTO patient) {
+        try {
+            createConnection();
+            String sql = "UPDATE patients SET dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setString(1, patient.getPatientDni());
+            stm.setString(2, patient.getName());
+            stm.setString(3, patient.getAddress());
+            stm.setString(4, patient.getMail());
+            stm.setString(5, patient.getGenre());
+            stm.setString(6, patient.getAge());
+            stm.setInt(7, patient.getPatientId());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
+
     public static List<PatientDTO> getAllPatients() {
         try {
             createConnection();
             Statement stm = con.createStatement();
             ResultSet result = stm.executeQuery("SELECT * FROM patients");
             while (result.next()) {
-                PatientDTO patient = new PatientDTO(result.getString(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6));
+                PatientDTO patient = new PatientDTO(result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7));
                 patients.add(patient);
             }
             con.close();
@@ -121,9 +142,9 @@ public class Database {
             createConnection();
             String sql = "INSERT INTO practices (practiceCode, practiceName)" +
                     "VALUES (?, ?)";
-            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, practice.getPracticeCode());
-            stmt.setString(2, practice.getPracticeName());
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, practice.getPracticeCode());
+            stm.setString(2, practice.getPracticeName());
             con.close();
         }
         catch (Exception error) {
