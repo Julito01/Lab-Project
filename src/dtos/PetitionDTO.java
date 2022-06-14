@@ -25,16 +25,7 @@ public class PetitionDTO {
         this.practices = practices;
         this.deliverDate = getDeliveryDate(this.loadDate, this.practices);
         this.petitionCompleted = false;
-        createPetition(this);
         this.counter++;
-    }
-
-    private void createPetition(PetitionDTO petitionDTO) {
-        String medInsurance = petitionDTO.getMedInsurance();
-        LocalDate loadDate = petitionDTO.getLoadDate();
-        List<PracticeDTO> practices = petitionDTO.getPractices();
-
-        Petition petition = new Petition(medInsurance, loadDate, practices);
     }
 
     public static void createPatientPetition(String patientId, int petitionId, String practiceName) {
@@ -56,7 +47,7 @@ public class PetitionDTO {
         return counter;
     }
 
-    private static List<PracticeDTO> getPractices() {
+    public static List<PracticeDTO> getPractices() {
         return practices;
     }
 
