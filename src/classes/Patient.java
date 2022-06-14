@@ -5,7 +5,8 @@ import dtos.PatientDTO;
 import java.util.List;
 
 public class Patient extends Person {
-    private String patientId;
+    private int patientId;
+    private String patientDni;
     private String name;
     private String address;
     private String mail;
@@ -15,25 +16,27 @@ public class Patient extends Person {
 
     public Patient(PatientDTO patient) {
         this.patientId = patient.getPatientId();
+        this.patientDni = patient.getPatientDni();
         this.name = patient.getName();
         this.address = patient.getAddress();
         this.mail = patient.getMail();
         this.genre = patient.getGenre();
         this.age = patient.getAge();
         this.self = this;
-        createPatient(this);
+        System.out.println(patientId);
     }
-    private void createPatient(Patient patient) {
-        Database.createPatient(patient);
+    public void createPatient() {
+        Database.createPatient(self);
     }
 
-    public static void deletePatient(String patientId) {
+    public static void deletePatient(int patientId) {
         // Deletes a desired patient through the patient id
         Database.deletePatient(patientId);
     }
 
-    private void editPatient() {
+    public static void updatePatient(PatientDTO patient) {
         // Modifies the data of a desired patient through the patient id
+        Database.updatePatient(patient);
     }
 
     public static List<PatientDTO> getAllPatients() {
@@ -41,8 +44,12 @@ public class Patient extends Person {
         return patients;
     }
 
-    public String getPatientId() {
+    public int getPatientId() {
         return this.patientId;
+    }
+
+    public String getPatientDni() {
+        return this.patientDni;
     }
 
     public String getName() {
