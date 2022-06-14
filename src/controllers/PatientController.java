@@ -19,8 +19,9 @@ public class PatientController {
     }
 
     public boolean setPatient(PatientDTO patient) {
-        if (verifyPatientId(patient.getPatientId()) && verifyName(patient.getName()) && verifyAddress(patient.getAddress()) && verifyEmail(patient.getMail()) && verifyAge(patient.getAge())) {
+        if (verifyPatientId(patient.getPatientDni()) && verifyName(patient.getName()) && verifyAddress(patient.getAddress()) && verifyEmail(patient.getMail()) && verifyAge(patient.getAge())) {
             Patient newPatient = new Patient(patient);
+            newPatient.createPatient();
             AdminMainFrame.setDefaultValuesArray(patient);
             return true;
         }
@@ -36,11 +37,15 @@ public class PatientController {
 
     }
 
+    public void updatePatient(PatientDTO patient) {
+        Patient.updatePatient(patient);
+    }
+
     public List<PatientDTO> getAllPatients() {
         return Patient.getAllPatients();
     }
 
-    public void deletePatient(String patientId) {
+    public void deletePatient(int patientId) {
         Patient.deletePatient(patientId);
     }
 
