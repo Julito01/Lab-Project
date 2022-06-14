@@ -25,12 +25,12 @@ public class AddPatientFrame extends JDialog {
     private JLabel genreLabel;
     private JLabel ageLabel;
     private JButton addPatientButton;
-    private PatientController cp;
+    private PatientController patInstance;
     private AddPatientFrame self;
 
     public AddPatientFrame(Window owner, String title) {
         super(owner, title);
-        this.cp = PatientController.getInstance();
+        this.patInstance = PatientController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(460, 300);
@@ -63,7 +63,7 @@ public class AddPatientFrame extends JDialog {
                 String genre = genreField.getSelectedItem().toString();
                 String age = ageField.getText();
 
-                if (cp.setPatient(new PatientDTO(id, name, address, email, genre, age))) {
+                if (patInstance.setPatient(new PatientDTO(id, name, address, email, genre, age))) {
                     JOptionPane.showMessageDialog(null, "Paciente agregado con éxito.", "Paciente agregado", JOptionPane.INFORMATION_MESSAGE);
                     self.dispose();
                 }
