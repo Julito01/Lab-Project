@@ -18,15 +18,22 @@ public class PatientController {
         return pcObject;
     }
 
-    public boolean setPatient(String patientId, String name, String address, String email, String genre, String age) {
-        if (verifyPatientId(patientId) && verifyName(name) && verifyAddress(address) && verifyEmail(email) && verifyAge(age)) {
-            PatientDTO patientDTO = new PatientDTO(patientId, name, address, email, genre, age);
-            AdminMainFrame.setDefaultValuesArray(patientDTO);
+    public boolean setPatient(PatientDTO patient) {
+        if (verifyPatientId(patient.getPatientId()) && verifyName(patient.getName()) && verifyAddress(patient.getAddress()) && verifyEmail(patient.getMail()) && verifyAge(patient.getAge())) {
+            Patient newPatient = new Patient(patient);
+            AdminMainFrame.setDefaultValuesArray(patient);
             return true;
         }
         else {
             return false;
         }
+        /* Ejemplo para preguntarle al profe
+           public int addPersona(PersonaDTO unaPersona) {
+                listPersonas.add(new Persona(unaPersona));
+                return listaPersonas.size();
+           }
+        */
+
     }
 
     public List<PatientDTO> getAllPatients() {
