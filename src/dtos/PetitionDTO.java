@@ -28,21 +28,6 @@ public class PetitionDTO {
         this.counter++;
     }
 
-    public static void createPatientPetition(String patientId, int petitionId, String practiceName) {
-        for (int i = 0; i < practices.size(); i++) {
-            int practId = Practice.getCurrPracticeId(practiceName);
-            Database.createPatientPetition(patientId, petitionId, practId);
-        }
-    }
-
-    private void deletePetition() {
-        // Deletes a desired petition through the petition id
-    }
-
-    private void editPetition() {
-        // Modifies the data of a petition through the petition id
-    }
-
     public static int getPetitionId() {
         return counter;
     }
