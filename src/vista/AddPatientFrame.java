@@ -1,6 +1,7 @@
 package vista;
 
 import controllers.PatientController;
+import dtos.PatientDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +63,7 @@ public class AddPatientFrame extends JDialog {
                 String genre = genreField.getSelectedItem().toString();
                 String age = ageField.getText();
 
-                if (cp.setPatient(id, name, address, email, genre, age)) {
+                if (cp.setPatient(new PatientDTO(id, name, address, email, genre, age))) {
                     JOptionPane.showMessageDialog(null, "Paciente agregado con éxito.", "Paciente agregado", JOptionPane.INFORMATION_MESSAGE);
                     self.dispose();
                 }
