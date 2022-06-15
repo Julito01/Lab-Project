@@ -1,9 +1,12 @@
 package vista;
 
 import controllers.PatientController;
+import dtos.PatientDTO;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +25,14 @@ public class EditPatientFrame extends JDialog {
     private JTextField ageField;
     private JComboBox genreField;
     private JButton editPatientButton;
-    private PatientController cp;
+    private PatientController patInstance;
     private EditPatientFrame self;
+    private PatientDTO patientDTO;
 
-    public EditPatientFrame(Window owner, String title) {
+    public EditPatientFrame(Window owner, String title, PatientDTO patient) {
         super(owner, title);
-        this.cp = PatientController.getInstance();
+        this.patientDTO = patient;
+        this.patInstance = PatientController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(460, 300);
@@ -36,7 +41,17 @@ public class EditPatientFrame extends JDialog {
         this.self = this;
         this.bindEvents();
         setGenreModel();
+        displayValues(patient);
         this.setLocationRelativeTo(null);
+    }
+
+    private void displayValues(PatientDTO patient) {
+        dniField.setText(patient.getPatientDni());
+        nameField.setText(patient.getName());
+        addressField.setText(patient.getAddress());
+        mailField.setText(patient.getMail());
+        genreField.setSelectedItem(patient.getGenre());
+        ageField.setText(patient.getAge());
     }
 
     private void setGenreModel() {
@@ -49,7 +64,22 @@ public class EditPatientFrame extends JDialog {
         genreField.setModel(model);
     }
 
-    private void bindEvents() {
+    private void editPatientObj(PatientDTO patient) {
+        patient.setPatientDni(dniField.getText());
+        patient.setName(nameField.getText());
+        patient.setAddress(addressField.getText());
+        patient.setMail(mailField.getText());
+        patient.setGenre(genreField.getSelectedItem().toString());
+        patient.setAge(ageField.getText());
+    }
 
+    private void bindEvents() {
+        editPatientButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                editPatientObj(patientDTO);
+                patInstance.updatePatient(patientDTO);
+            }
+        });
     }
 }
