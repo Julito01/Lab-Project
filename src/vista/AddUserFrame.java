@@ -2,18 +2,16 @@ package vista;
 
 import classes.enumerations.UserTypeEnum;
 import com.github.lgooddatepicker.components.DatePicker;
-import config.Database;
 import controllers.UserController;
-import model.UserType;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-import classes.SystemUser;
 
-public class CreateUserFrame extends JDialog {
+public class AddUserFrame extends JDialog {
     private JPanel mainPanel;
     private JTextField userField;
     private JPasswordField passField;
@@ -26,12 +24,12 @@ public class CreateUserFrame extends JDialog {
     private JButton submitButton;
     private JLabel dateLabel;
     private DatePicker dateField;
-    private CreateUserFrame self;
+    private AddUserFrame self;
     private List<UserTypeEnum> userTypes = new ArrayList<>();
     private List<String[]> usersFetched = new ArrayList<>();
     private UserController userInstance;
 
-    public CreateUserFrame(Window owner, String title) {
+    public AddUserFrame(Window owner, String title) {
         super(owner, title);
         this.userInstance = UserController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
