@@ -154,6 +154,7 @@ public class AdminMainFrame extends JFrame {
                 // to do something
             }
         });
+        
         // User events
         editUserLabel.addMouseListener(new MouseAdapter() {
             @Override
