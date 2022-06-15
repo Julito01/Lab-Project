@@ -16,7 +16,6 @@ public class Practice {
         this.practiceId = counter;
         this.practiceCode = practiceCode;
         this.practiceName = practiceName;
-        createPractice(this);
         counter++;
     }
 
@@ -25,16 +24,16 @@ public class Practice {
         // return /* something */
     }
 
-    private void createPractice(Practice practice) {
+    public static void createPractice(PracticeDTO practice) {
         Database.createPractice(practice);
     }
 
-    private void deletePractice() {
-        Database.deletePractice();
+    private void deletePractice(int practiceId) {
+        Database.deletePractice(practiceId);
     }
 
-    private void editPractice() {
-        Database.editPractice();
+    private void editPractice(PracticeDTO practice) {
+        Database.updatePractice(practice);
     }
 
     public static int getCurrPracticeId(String practiceName) {
