@@ -47,6 +47,10 @@ public class UserController {
         }
     }
 
+    public void deleteUser(int userId) {
+        SystemUser.deleteSystemUser(userId);
+    }
+
     private boolean verifyUserType(Object userType) {
         if (userType != null) {
             return true;
