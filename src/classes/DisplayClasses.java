@@ -7,7 +7,12 @@ import javax.swing.*;
 import java.util.List;
 
 public class DisplayClasses {
-    private static boolean firstQuery = true;
+    private static boolean firstQueryPatient = true;
+    private static boolean firstQueryStation = true;
+    private static boolean firstQueryPetition = true;
+    private static boolean firstQueryResult = true;
+    private static boolean firstQueryUser = true;
+    private static boolean firstQueryPractice = true;
     private static PatientController patInstance = PatientController.getInstance();
     private static StationController staInstance = StationController.getInstance();
     private static UserController usrInstance = UserController.getInstance();
@@ -16,13 +21,13 @@ public class DisplayClasses {
     private static PetitionController petInstance = PetitionController.getInstance();
 
     public static DefaultListModel<PatientDTO> displayPatients(List<PatientDTO> patientsArray, List<PatientDTO> defaultPatient, DefaultListModel<PatientDTO> patientListModel) {
-        if (firstQuery) {
+        if (firstQueryPatient) {
             patientsArray = patInstance.getAllPatients();
             for (PatientDTO patientDTO : patientsArray) {
                 defaultPatient.add(patientDTO);
                 patientListModel.addElement(patientDTO);
             }
-            firstQuery = false;
+            firstQueryPatient = false;
         }
         else {
             patientListModel.removeAllElements();
@@ -34,13 +39,13 @@ public class DisplayClasses {
     }
 
     public static DefaultListModel<StationDTO> displayStations(List<StationDTO> stationsArray, List<StationDTO> defaultPatient, DefaultListModel<StationDTO> stationListModel) {
-        if (firstQuery) {
+        if (firstQueryStation) {
             stationsArray = staInstance.getAllStations();
             for (StationDTO stationDTO : stationsArray) {
                 defaultPatient.add(stationDTO);
                 stationListModel.addElement(stationDTO);
             }
-            firstQuery = false;
+            firstQueryStation = false;
         }
         else {
             stationListModel.removeAllElements();
@@ -52,13 +57,13 @@ public class DisplayClasses {
     }
 
     public static DefaultListModel<SystemUserDTO> displayUsers(List<SystemUserDTO> usersArray, List<SystemUserDTO> defaultUser, DefaultListModel<SystemUserDTO> userListModel) {
-        if (firstQuery) {
+        if (firstQueryUser) {
             usersArray = usrInstance.getAllUsers();
             for (SystemUserDTO userDTO : usersArray) {
                 defaultUser.add(userDTO);
                 userListModel.addElement(userDTO);
             }
-            firstQuery = false;
+            firstQueryUser = false;
         }
         else {
             userListModel.removeAllElements();
@@ -70,13 +75,13 @@ public class DisplayClasses {
     }
 
     public static DefaultListModel<PracticeDTO> displayPractices(List<PracticeDTO> practicesArray, List<PracticeDTO> defaultPractice, DefaultListModel<PracticeDTO> practiceListModel) {
-        if (firstQuery) {
+        if (firstQueryPractice) {
             practicesArray = practInstance.getAllPractices();
             for (PracticeDTO practiceDTO : practicesArray) {
                 defaultPractice.add(practiceDTO);
                 practiceListModel.addElement(practiceDTO);
             }
-            firstQuery = false;
+            firstQueryPractice = false;
         }
         else {
             practiceListModel.removeAllElements();
@@ -88,13 +93,13 @@ public class DisplayClasses {
     }
 
     public static DefaultListModel<ResultDTO> displayResults(List<ResultDTO> resultsArray, List<ResultDTO> defaultResult, DefaultListModel<ResultDTO> resultListModel) {
-        if (firstQuery) {
+        if (firstQueryResult) {
 //            resultsArray = resInstance.getAllResults();
             for (ResultDTO resultDTO : resultsArray) {
                 defaultResult.add(resultDTO);
                 resultListModel.addElement(resultDTO);
             }
-            firstQuery = false;
+            firstQueryResult = false;
         }
         else {
             resultListModel.removeAllElements();
@@ -106,13 +111,13 @@ public class DisplayClasses {
     }
 
     public static DefaultListModel<PetitionDTO> displayPetitions(List<PetitionDTO> petitionsArray, List<PetitionDTO> defaultPetition, DefaultListModel<PetitionDTO> petitionListModel) {
-        if (firstQuery) {
+        if (firstQueryPetition) {
 //            petitionsArray = petInstance.getAllPetitions();
             for (PetitionDTO petitionDTO : petitionsArray) {
                 defaultPetition.add(petitionDTO);
                 petitionListModel.addElement(petitionDTO);
             }
-            firstQuery = false;
+            firstQueryPetition = false;
         }
         else {
             petitionListModel.removeAllElements();
