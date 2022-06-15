@@ -13,27 +13,12 @@ public class SystemUserDTO extends Person {
     private String password;
     private LocalDate birthdate;
     private static UserTypeEnum userType;
-    private static SystemUserDTO self;
     private static List<SystemUserDTO> systemUsers = new ArrayList<>();
 
-    public SystemUserDTO() {}
-
     public SystemUserDTO(String username, String password, UserTypeEnum userType) {
-        super();
         this.username = username;
         this.password = password;
         this.userType = userType;
-        this.self = this;
-        createSystemUser(this);
-    }
-
-    private void createSystemUser(SystemUserDTO userDTO) {
-        // Creates a new user and adds it to the database
-        String username = userDTO.getUsername();
-        String password = userDTO.getPassword();
-        UserTypeEnum userType = userDTO.getUserType();
-
-        SystemUser systemUser = new SystemUser(username, password, userType);
     }
 
     public UserTypeEnum verifyUserType(String username) {
