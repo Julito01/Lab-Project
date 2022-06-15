@@ -1,31 +1,42 @@
 package controllers;
 
-import classes.Patient;
 import classes.Station;
-import dtos.PatientDTO;
 import dtos.StationDTO;
 import vista.AdminMainFrame;
 
-public class SucursalController {
-    private static SucursalController scObject;
-    private SucursalController() {}
+import java.util.List;
 
-    public static SucursalController getInstance() {
+public class StationController {
+    private static StationController scObject;
+    private StationController() {}
+
+    public static StationController getInstance() {
         if (scObject == null) {
-            scObject = new SucursalController();
+            scObject = new StationController();
         }
         return scObject;
     }
 
-    public boolean setSTation(StationDTO station) {
+    public boolean setStation(StationDTO station) {
         if (verifyAddress(station.getAddress())) {
             Station newStation = new Station(station);
-            newStation.createStation();
+            newStation.createStation(station);
             AdminMainFrame.setDefaultStationArray(station);
             return true;
-        } else {
-            return false;
         }
+        return false;
+    }
+
+    public List<StationDTO> getAllStations() {
+        return Station.getAllStations();
+    }
+
+    public void deleteStation(int stationId) {
+        Station.deleteStation(stationId);
+    }
+
+    public void updateStation(StationDTO station) {
+        Station.updateStation(station);
     }
 
     private boolean verifyAddress(String address) {

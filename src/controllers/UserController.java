@@ -6,6 +6,7 @@ import dtos.SystemUserDTO;
 
 import javax.swing.*;
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserController {
     private String username;
@@ -41,6 +42,11 @@ public class UserController {
             return false;
         }
     }
+
+    public static List<SystemUserDTO> getAllUsers() {
+        return SystemUser.getAllUsers();
+    }
+
     private boolean verifyUsername(String username) {
         if (username.length() > 4) {
             return true;

@@ -1,2 +1,4 @@
-package controllers;public class ResultController {
+package controllers;
+
+public class ResultController {
 }
