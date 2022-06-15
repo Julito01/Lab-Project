@@ -2,11 +2,9 @@ package vista;
 
 import classes.Practice;
 import com.github.lgooddatepicker.components.DatePicker;
-import controllers.PatientController;
-import controllers.PetitionController;
-import dtos.PatientDTO;
-import dtos.PetitionDTO;
-import dtos.PracticeDTO;
+import controllers.*;
+import dtos.*;
+
 import javax.swing.Timer;
 import javax.swing.*;
 import java.awt.*;
