@@ -30,6 +30,10 @@ public class SystemUser extends Person {
         Database.createUser(user);
     }
 
+    public static void deleteSystemUser(int userId) {
+        Database.deleteUser(userId);
+    }
+
     public static UserTypeEnum verifyUserType(String username) {
         UserTypeEnum typeOfUser = null;
         for (SystemUserDTO systemUser: systemUsers) {
