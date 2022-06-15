@@ -1,7 +1,9 @@
 package config;
 
 import classes.*;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import dtos.PatientDTO;
+import dtos.PracticeDTO;
 
 import java.sql.*;
 import java.util.*;
@@ -141,6 +143,35 @@ public class Database {
             String sql = "INSERT INTO practices (practiceCode, practiceName)" +
                     "VALUES (?, ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, practice.getPracticeId());
+            stm.setInt(2, practice.getPracticeCode());
+            stm.setString(3, practice.getPracticeName());
+            stm.setInt(4, practice.getPracticeLength());
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+    }
+
+    public static void deletePractice(int practiceId) {
+        try {
+            createConnection();
+            String sql = "DELETE FROM practices WHERE practiceId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, practiceId);
+            stm.executeUpdate(stm.toString());
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+    }
+
+    public static void updatePractice(PracticeDTO practice) {
+        try {
+            createConnection();
+            String sql = "UPDATE practices SET practiceId = ?, practiceCode = ?, practiceName = ?, practiceLenght = ?";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, practice.getPracticeCode());
             stm.setString(2, practice.getPracticeName());
             con.close();
@@ -150,19 +181,12 @@ public class Database {
         }
     }
 
-    public static void deletePractice() {
-        // Something
-    }
-
-    public static void editPractice() {
-        // Something
-    }
 
     public static List<String> getPractices() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result  = stm.executeQuery("SELECT practiceName FROM practices;");
+            ResultSet result  = stm.executeQuery("SELECT practiceName FROM practices");
             while (result.next()) {
                 String practiceName = result.getString(1);
                 practices.add(practiceName);
@@ -181,7 +205,7 @@ public class Database {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            sql.append("SELECT practiceId FROM practices WHERE practiceName = ");
+            sql.append("SELECT practiceId FROM practices WHERE practiceName = ?");
             sql.append(practiceName);
             ResultSet result = stm.executeQuery(sql.toString());
             while (result.next()) {
@@ -192,6 +216,24 @@ public class Database {
             System.out.println("Error" + error);
         }
         return practiceId;
+    }
+
+    public static int getPracticeLength(int practiceId) {
+        int practiceLength = 0;
+        try {
+            createConnection();
+            String sql= "SELECT practiceLength FROM practices WHERE practiceId = ?";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, practiceId);
+            ResultSet result = stm.executeQuery(sql);
+            while (result.next()) {
+                practiceLength = result.getInt(1);
+            }
+            con.close();
+        } catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+        return practiceLength;
     }
 
     // Petition's methods
@@ -259,7 +301,7 @@ public class Database {
         }
     }
 
-    public static void updateStation(Station station) {
+    public static void updateStation(StationDTO station) {
         try {
             createConnection();
             String sql = "UPDATE patients SET dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?";
@@ -275,23 +317,22 @@ public class Database {
         }
     }
 
-    public static List<String> getStation() {
+    public static List<String> getAllStation() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result  = stm.executeQuery("SELECT practiceName FROM practices;");
+            ResultSet station = stm.executeQuery("SELECT * FROM station");
             while (result.next()) {
-                String practiceName = result.getString(1);
-                practices.add(practiceName);
+                StationDTO station = new PatientDTO(station.getString(2), station.getString(3), station.getString(4));
+                station.add(station);
             }
             con.close();
         }
         catch (Exception error) {
             System.out.println("Error" + error);
         }
-        return practices;
+        return station;
     }
-
 
 
     // Result's methods
@@ -340,5 +381,20 @@ public class Database {
             System.out.println("Error: " + error);
         }
     }
-    //Falta la lista pero en ingles
+
+    public static List<String> getAllResults() {
+        try {
+            createConnection();
+            Statement stm = con.createStatement();
+            ResultSet result = stm.executeQuery("SELECT * FROM station");
+            while (result.next()) {
+                ResultDTO result = new PatientDTO(reslut.getString(2), result.getString(3), result.getString(4));
+                result.add(result);
+            }
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+        return result;
 }
