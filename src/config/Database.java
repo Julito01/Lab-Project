@@ -33,12 +33,12 @@ public class Database {
     public static void createUser(SystemUser user) {
         try {
             createConnection();
-            String sql = "INSERT INTO users (username, password, userType)" +
-                    "VALUES (?, ?, ?)";
+            String sql = "INSERT INTO users (userId = ?,username = ?, password = ?, userType = ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3, user.getUserType());
+            stm.setString(2, user.getUsername());
+            stm.setString(3, user.getPassword());
+            stm.setString(4, user.getUserType());
             stm.executeUpdate();
             con.close();
         }
@@ -47,6 +47,35 @@ public class Database {
         }
     }
 
+    public static void deleteUser(int userId) {
+        try {
+            createConnection();
+            String sql = "DELETE FROM users WHERE userId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, userId);
+            stm.executeUpdate(stm.toString());
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+    }
+
+    public static void updateUser(SystemUser user) {
+        try {
+            createConnection();
+            String sql = "UPDATE users SET username = ?, password = ?, userType = ?)";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setString(1, user.getUsername());
+            stm.setString(2, user.getUsername());
+            stm.setString(3, user.getPassword());
+            stm.setString(4, user.getUserType());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
     public static List<String[]> getUsers() {
         try {
             createConnection();
@@ -68,8 +97,7 @@ public class Database {
     public static void createPatient(Patient patient) {
         try {
             createConnection();
-            String sql = "INSERT INTO patients (patientId, dni, name, address, mail, genre, age)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO patients (dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, patient.getPatientId());
             stm.setString(2, patient.getPatientDni());
