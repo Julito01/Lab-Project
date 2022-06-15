@@ -22,12 +22,10 @@ public class PatientController {
         if (verifyPatientId(patient.getPatientDni()) && verifyName(patient.getName()) && verifyAddress(patient.getAddress()) && verifyEmail(patient.getMail()) && verifyAge(patient.getAge())) {
             Patient newPatient = new Patient(patient);
             newPatient.createPatient();
-            AdminMainFrame.setDefaultValuesArray(patient);
+            AdminMainFrame.setDefaultPatientArray(patient);
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
         /* Ejemplo para preguntarle al profe
            public int addPersona(PersonaDTO unaPersona) {
                 listPersonas.add(new Persona(unaPersona));
@@ -53,36 +51,28 @@ public class PatientController {
         if (id.length() > 0 && id.length() <= 8) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     private boolean verifyName(String name) {
         if (name.length() > 7) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     private boolean verifyAddress(String address) {
         if (address.length() > 5) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     private boolean verifyEmail(String email) {
         if (email.length() > 10) {
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     private boolean verifyAge(String age) {
@@ -90,8 +80,6 @@ public class PatientController {
         if (patientAge > 0){
             return true;
         }
-        else {
-            return false;
-        }
+        return false;
     }
 }
