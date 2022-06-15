@@ -1,4 +1,5 @@
 package dtos;
+import java.time.LocalTime;
 import java.util.*;
 
 import classes.Practice;
@@ -10,17 +11,15 @@ import javax.xml.transform.Result;
 public class PracticeDTO {
     private static int practiceId;
     private int counter = 1;
-    private static int practCodeCounter = 1000;
     private static int practiceCode;
     private static String practiceName;
 
-    public PracticeDTO(String practiceName) {
-        practiceId = counter;
-        practiceCode = practCodeCounter;
-        PracticeDTO.practiceName = practiceName;
+    public PracticeDTO(String practiceName, int practiceCode) {
+        this.practiceId = counter;
+        this.practiceCode = practiceCode;
+        this.practiceName = practiceName;
         createPractice(this);
         counter++;
-        practCodeCounter++;
     }
 
     public void setPracticePetition() {
@@ -50,6 +49,7 @@ public class PracticeDTO {
         return Database.getPracticeId(practiceName);
     }
 
+    public LocalTime getPracticeLength(int practiceId) {return Database.getPracticeLength(practiceId);}
     public List<String> getAllPractices() {
         return Database.getPractices();
     }
