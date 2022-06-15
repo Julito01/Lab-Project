@@ -1,4 +1,5 @@
 package controllers;
+import classes.Patient;
 import classes.Practice;
 import dtos.PracticeDTO;
 
@@ -15,8 +16,8 @@ public class PracticeController {
         return pcObject;
     }
 
-    public void createPractice() {
-
+    public void createPractice(PracticeDTO practice) {
+        Practice.createPractice(practice);
     }
 
     public static List<PracticeDTO> getAllPractices() {
