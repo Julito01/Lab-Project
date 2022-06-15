@@ -86,13 +86,12 @@ public class Database {
     }
 
     public static void deletePatient(int patientId) {
-        StringBuilder sql = new StringBuilder();
         try {
             createConnection();
-            Statement stm = con.createStatement();
-            sql.append("DELETE FROM patients WHERE patientId = ");
-            sql.append(patientId);
-            stm.executeUpdate(sql.toString());
+            String sql = "DELETE FROM patients WHERE patientId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, patientId);
+            stm.executeUpdate(stm.toString());
         }
         catch (Exception error) {
             System.out.println("Error" + error);
