@@ -1,6 +1,7 @@
 package vista;
 
 import classes.SystemUser;
+import classes.enumerations.UserTypeEnum;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +74,7 @@ public class LoginFrame extends JFrame {
         createUserButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                CreateUserFrame frame = new CreateUserFrame(self, "Crear usuario");
+                AddUserFrame frame = new AddUserFrame(self, "Crear usuario");
                 frame.setVisible(true);
             }
         });
@@ -193,16 +194,16 @@ public class LoginFrame extends JFrame {
                     System.out.println("Usuario: " + userInput + "\nContraseña: " + userInput);
                     if (SystemUser.verifyUserExist(userInput)) {
                         self.dispose();
-                        String userType = SystemUser.verifyUserType(userInput);
+                        UserTypeEnum userType = SystemUser.verifyUserType(userInput);
                         System.out.println("Tipo de usuario: " + userType);
-                        if (userType.equals("ADMINISTRADOR")) {
+                        if (userType == UserTypeEnum.ADMINISTRADOR) {
                             AdminMainFrame frame = new AdminMainFrame();
                             frame.setVisible(true);
-                        } else if (userType.equals("LABORATORISTA")) {
+                        } else if (userType == UserTypeEnum.LABORATORISTA) {
                             LabMainFrame frame = new LabMainFrame();
                             frame.setVisible(true);
                         }
-                        else if (userType.equals("RECEPCIONISTA")) {
+                        else if (userType == UserTypeEnum.RECEPCIONISTA) {
                             RecMainFrame frame = new RecMainFrame();
                             frame.setVisible(true);
                         }
