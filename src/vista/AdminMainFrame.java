@@ -1,7 +1,10 @@
 package vista;
 
-import dtos.PatientDTO;
-import controllers.PatientController;
+import classes.DisplayClasses;
+import classes.FilterModel;
+import config.Database;
+import controllers.*;
+import dtos.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -19,11 +22,6 @@ public class AdminMainFrame extends JFrame {
     private JPanel exitButton;
     private JLabel exitLabel;
     private JTabbedPane optionsPane;
-    private JPanel stationTab;
-    private JPanel practiceTab;
-    private JPanel petitionTab;
-    private JPanel resultTab;
-    private JPanel userTab;
     private JLabel accountLabel;
     private JSeparator accountSeparator;
     private JPanel accountButton;
@@ -35,38 +33,83 @@ public class AdminMainFrame extends JFrame {
     private JList patientList;
     private JTextField searchPatientField;
     private JLabel searchPatientLabel;
-    private JLabel refreshLabel;
+    private JLabel refreshPatientLabel;
+    private JPanel stationTab;
+    private JPanel stationPanel;
+    private JScrollPane stationListPanel;
     private JLabel addStationLabel;
     private JLabel deleteStationLabel;
     private JLabel editStationLabel;
-    private JTextField stationField;
-    private JLabel addressStationLabel;
+    private JTextField searchStationField;
+    private JLabel searchStationLabel;
     private JLabel refreshStationLabel;
-    private JLabel addPracticeLabel;
-    private JLabel deletePracticeLabel;
-    private JLabel editPracticeLabel;
-    private JTextField practiceField;
-    private JLabel practiceLabel;
-    private JLabel refreshPractLabel;
+    private JList stationList;
+    private JPanel petitionTab;
+    private JPanel petitionPanel;
+    private JScrollPane petitionListPanel;
     private JLabel addPetitionLabel;
     private JLabel deletePetitionLabel;
     private JLabel editPetitionLabel;
-    private JTextField petitionField;
-    private JLabel petitionLabel;
+    private JTextField searchPetitionField;
+    private JLabel searchPetitionLabel;
+    private JLabel refreshPetitionLabel;
+    private JPanel practiceTab;
+    private JPanel practicePanel;
+    private JScrollPane practiceListPanel;
+    private JLabel addPracticeLabel;
+    private JLabel deletePracticeLabel;
+    private JLabel editPracticeLabel;
+    private JTextField searchPractField;
+    private JLabel searchPractLabel;
+    private JLabel refreshPractLabel;
+    private JList practiceList;
+    private JPanel resultTab;
+    private JPanel resultPanel;
+    private JScrollPane resultListPanel;
     private JLabel addResultLabel;
     private JLabel deleteResultLabel;
     private JLabel editResultLabel;
-    private JTextField resultField;
-    private JLabel resultLabel;
+    private JTextField searchResultField;
+    private JLabel searchResultLabel;
     private JLabel refreshResultLabel;
+    private JPanel userTab;
+    private JPanel userPanel;
+    private JScrollPane userListPanel;
     private JLabel addUserLabel;
     private JLabel deleteUserLabel;
+    private JLabel editUserLabel;
+    private JTextField searchUserField;
+    private JLabel searchUserLabel;
+    private JLabel refreshUserLabel;
+    private JList petitionList;
+    private JList resultList;
+    private JList userList;
+
+    // Default values arrays
     private List<PatientDTO> patients = new ArrayList<>();
     private static List<PatientDTO> defaultPatient = new ArrayList<>();
-    private DefaultListModel<PatientDTO> listModel = new DefaultListModel<>();
+    private static List<StationDTO> defaultStation = new ArrayList<>();
+    private static List<StationDTO> defaultPetition = new ArrayList<>();
+    private static List<StationDTO> defaultUser = new ArrayList<>();
+    private static List<StationDTO> defaultResult = new ArrayList<>();
+    private static List<StationDTO> defaultPractice = new ArrayList<>();
+    private DefaultListModel<PatientDTO> patientListModel = new DefaultListModel<>();
+    private DefaultListModel<StationDTO> stationListModel = new DefaultListModel<>();
+    private DefaultListModel<PatientDTO> petitionListModel = new DefaultListModel<>();
+    private DefaultListModel<PatientDTO> userListModel = new DefaultListModel<>();
+    private DefaultListModel<PatientDTO> resultListModel = new DefaultListModel<>();
+    private DefaultListModel<PatientDTO> practiceListModel = new DefaultListModel<>();
+
     private List<PatientDTO> patientsArray = new ArrayList<>();
     private static boolean firstQuery = true;
+
     private PatientController patInstance;
+    private StationController staInstance;
+    private PetitionController petInstance;
+    private PracticeController pracInstance;
+    private UserController userInstance;
+    private ResultController resultInstance;
+
     private int xMouse, yMouse;
     private AdminMainFrame self;
 
@@ -82,63 +125,114 @@ public class AdminMainFrame extends JFrame {
         this.bindEvents();
         exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         accountLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        addPatientLabel.setText("<html><u>Agregar paciente</u></html>");
-        addPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        deletePatientLabel.setText("<html><u>Eliminar paciente</u></html>");
-        deletePatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        editPatientLabel.setText("<html><u>Editar paciente</u></html>");
-        editPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        refreshLabel.setText("<html><u>Refrescar</u></html>");
-        refreshLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        patientList.setModel(displayPatients());
+        setUI();
+        System.out.println(Database.getPracticeLength(1));
         this.setLocationRelativeTo(null);
     }
 
-    public static void setDefaultValuesArray(PatientDTO patient) {
+    public static void setDefaultPatientArray(PatientDTO patient) {
         defaultPatient.add(patient);
     }
-
-    public DefaultListModel<PatientDTO> displayPatients() {
-        if (firstQuery) {
-            patientsArray = patInstance.getAllPatients();
-            for (PatientDTO patientDTO : patientsArray) {
-                defaultPatient.add(patientDTO);
-                listModel.addElement(patientDTO);
-            }
-            firstQuery = false;
-        }
-        else {
-            listModel.removeAllElements();
-            for (PatientDTO patient : defaultPatient) {
-                listModel.addElement(patient);
-            }
-        }
-        return listModel;
+    public static void setDefaultStationArray(StationDTO station) {
+        defaultStation.add(station);
     }
 
-    public void filterModel(DefaultListModel<PatientDTO> model, String filter) {
-        for (PatientDTO s : defaultPatient) {
-            if (!s.toString().startsWith(filter)) {
-                if (model.contains(s)) {
-                    model.removeElement(s);
-                }
-            } else {
-                if (!model.contains(s)) {
-                    model.addElement(s);
-                }
-            }
-        }
-    }
-
-    private void getPatientId(String patientName) {
-        for (int i = 0; i < patientsArray.size(); i++) {
-            if (patientsArray.get(i).getName().equals(patientName)) {
-                // nose
-            }
-        }
-    }
 
     private void bindEvents() {
+        // Petition events
+        addPetitionLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddPetitionFrame frame = new AddPetitionFrame(self, "Agregar petición");
+                frame.setVisible(true);
+            }
+        });
+        // User events
+        editUserLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                EditUserFrame frame = new EditUserFrame(self, "Editar usuario", (SystemUserDTO)userList.getSelectedValue());
+                frame.setVisible(true);
+            }
+        });
+
+        // Practice events
+        addPracticeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddPracticeFrame frame = new AddPracticeFrame(self, "Agregar práctica");
+                frame.setVisible(true);
+            }
+        });
+
+        editPracticeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                EditPracticeFrame frame = new EditPracticeFrame(self, "Editar práctica", (PracticeDTO)practiceList.getSelectedValue());
+                frame.setVisible(true);
+            }
+        });
+
+        deletePracticeLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                PracticeDTO practiceDTO = (PracticeDTO) practiceList.getSelectedValue();
+                int practiceToRemove = practiceList.getSelectedIndex();
+                staInstance.deleteStation(practiceDTO.getPracticeId());
+                JOptionPane.showMessageDialog(null,"Práctica eliminada con exito.", "Práctica eliminada", JOptionPane.INFORMATION_MESSAGE);
+                practiceListModel.remove(practiceToRemove);
+                defaultPractice.remove(practiceToRemove);
+            }
+        });
+
+        // Station events
+        addStationLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddStationFrame frame = new AddStationFrame(self, "Agregar sucursal");
+                frame.setVisible(true);
+            }
+        });
+
+        editStationLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                EditStationFrame frame = new EditStationFrame(self, "Editar sucursal.", (StationDTO)stationList.getSelectedValue());
+                frame.setVisible(true);
+            }
+        });
+
+        deleteStationLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                StationDTO stationDTO = (StationDTO) stationList.getSelectedValue();
+                int stationToRemove = stationList.getSelectedIndex();
+                staInstance.deleteStation(stationDTO.getStationId());
+                JOptionPane.showMessageDialog(null,"Sucursal eliminada con exito.", "Sucursal eliminada", JOptionPane.INFORMATION_MESSAGE);
+                stationListModel.remove(stationToRemove);
+                defaultStation.remove(stationToRemove);
+            }
+        });
+
+        searchStationField.getDocument().addDocumentListener(new DocumentListener(){
+            @Override public void insertUpdate(DocumentEvent e) { filter(); }
+            @Override public void removeUpdate(DocumentEvent e) { filter(); }
+            @Override public void changedUpdate(DocumentEvent e) {}
+            private void filter() {
+                String filter = searchPatientField.getText();
+                FilterModel.filterModelStation((DefaultListModel<StationDTO>) stationList.getModel(), filter, defaultStation);
+            }
+        });
+
+        // Patient events
+        addPatientLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddPatientFrame frame = new AddPatientFrame(self, "Agregar paciente");
+                frame.setVisible(true);
+            }
+        });
+
         editPatientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -147,10 +241,10 @@ public class AdminMainFrame extends JFrame {
             }
         });
 
-        refreshLabel.addMouseListener(new MouseAdapter() {
+        refreshPatientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                patientList.setModel(displayPatients());
+                patientList.setModel(DisplayClasses.displayPatients(patientsArray, defaultPatient, patientListModel));
             }
         });
 
@@ -161,7 +255,7 @@ public class AdminMainFrame extends JFrame {
                 int patientToRemove = patientList.getSelectedIndex();
                 patInstance.deletePatient(patientDTO.getPatientId());
                 JOptionPane.showMessageDialog(null,"Paciente eliminado con exito.", "Paciente eliminado", JOptionPane.INFORMATION_MESSAGE);
-                listModel.remove(patientToRemove);
+                patientListModel.remove(patientToRemove);
                 defaultPatient.remove(patientToRemove);
             }
         });
@@ -172,10 +266,11 @@ public class AdminMainFrame extends JFrame {
             @Override public void changedUpdate(DocumentEvent e) {}
             private void filter() {
                 String filter = searchPatientField.getText();
-                filterModel((DefaultListModel<PatientDTO>) patientList.getModel(), filter);
+                FilterModel.filterModelPatient((DefaultListModel<PatientDTO>) patientList.getModel(), filter, defaultPatient);
             }
         });
 
+        // UI Events
         header.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -234,13 +329,82 @@ public class AdminMainFrame extends JFrame {
                 self.dispose();
             }
         });
+    }
 
-        addPatientLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                AddPatientFrame frame = new AddPatientFrame(self, "Agregar paciente");
-                frame.setVisible(true);
+    private void getPatientId(String patientName) {
+        for (int i = 0; i < patientsArray.size(); i++) {
+            if (patientsArray.get(i).getName().equals(patientName)) {
+                // nose
             }
-        });
+        }
+    }
+
+    private void setUI() {
+        // Patient panel
+        addPatientLabel.setText("<html><u>Agregar paciente</u></html>");
+        addPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deletePatientLabel.setText("<html><u>Eliminar paciente</u></html>");
+        deletePatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editPatientLabel.setText("<html><u>Editar paciente</u></html>");
+        editPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshPatientLabel.setText("<html><u>Refrescar</u></html>");
+        refreshPatientLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        patientList.setModel(DisplayClasses.displayPatients(patientsArray, defaultPatient, patientListModel));
+
+        // Station panel
+        addStationLabel.setText("<html><u>Agregar sucursal</u></html>");
+        addStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteStationLabel.setText("<html><u>Eliminar sucursal</u></html>");
+        deleteStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editStationLabel.setText("<html><u>Editar sucursal</u></html>");
+        editStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshStationLabel.setText("<html><u>Refrescar</u></html>");
+        refreshStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        stationList.setModel(DisplayClasses.displayStations());
+
+        // Practice panel
+        addPracticeLabel.setText("<html><u>Agregar práctica</u></html>");
+        addPracticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deletePracticeLabel.setText("<html><u>Eliminar práctica</u></html>");
+        deletePracticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editPracticeLabel.setText("<html><u>Editar práctica</u></html>");
+        editPracticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshPractLabel.setText("<html><u>Refrescar</u></html>");
+        refreshPractLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        practiceList.setModel(displayPatients());
+
+        // Petition panel
+        addPetitionLabel.setText("<html><u>Agregar petición</u></html>");
+        addPetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deletePetitionLabel.setText("<html><u>Eliminar petición</u></html>");
+        deletePetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editPetitionLabel.setText("<html><u>Editar petición</u></html>");
+        editPetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshPetitionLabel.setText("<html><u>Refrescar</u></html>");
+        refreshPetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        petitionList.setModel(displayPatients());
+
+        // Result panel
+        addResultLabel.setText("<html><u>Agregar resultado</u></html>");
+        addResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteResultLabel.setText("<html><u>Eliminar resultado</u></html>");
+        deleteResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editResultLabel.setText("<html><u>Editar resultado</u></html>");
+        editResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshResultLabel.setText("<html><u>Refrescar</u></html>");
+        refreshResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        resultList.setModel(displayPatients());
+
+        // User panel
+        addUserLabel.setText("<html><u>Agregar usuario</u></html>");
+        addUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        deleteUserLabel.setText("<html><u>Eliminar usuario</u></html>");
+        deleteUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        editUserLabel.setText("<html><u>Editar usuario</u></html>");
+        editUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        refreshUserLabel.setText("<html><u>Refrescar</u></html>");
+        refreshUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        userList.setModel(displayPatients());
+
     }
 }
