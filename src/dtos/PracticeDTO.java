@@ -1,9 +1,7 @@
 package dtos;
-<<<<<<< HEAD
 import java.time.LocalTime;
 import java.util.*;
-=======
->>>>>>> d96e22e5c5e4c26d4ec68b50cb7b03cd84cd1cf0
+
 
 import config.Database;
 
@@ -13,20 +11,11 @@ public class PracticeDTO {
     private static int practiceCode;
     private static String practiceName;
     private String eth;
-
-<<<<<<< HEAD
-    public PracticeDTO(String practiceName, int practiceCode) {
-        this.practiceId = counter;
-        this.practiceCode = practiceCode;
-        this.practiceName = practiceName;
-        createPractice(this);
-=======
     public PracticeDTO(int practiceCode, String practiceName, String eth) {
         this.practiceId = counter;
         this.practiceCode = practiceCode;
         this.practiceName = practiceName;
         this.eth = eth;
->>>>>>> d96e22e5c5e4c26d4ec68b50cb7b03cd84cd1cf0
         counter++;
     }
 
@@ -43,14 +32,10 @@ public class PracticeDTO {
         return Database.getPracticeId(practiceName);
     }
 
-<<<<<<< HEAD
-    public LocalTime getPracticeLength(int practiceId) {return Database.getPracticeLength(practiceId);}
-    public List<String> getAllPractices() {
-        return Database.getPractices();
+    public List<PracticeDTO> getAllPractices() {
+        return Database.getAllPractices();
     }
 
-=======
->>>>>>> d96e22e5c5e4c26d4ec68b50cb7b03cd84cd1cf0
     public int getPracticeId() {
         return practiceId;
     }
