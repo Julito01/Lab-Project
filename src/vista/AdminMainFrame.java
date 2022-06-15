@@ -89,32 +89,42 @@ public class AdminMainFrame extends JFrame {
     private List<PatientDTO> patients = new ArrayList<>();
     private static List<PatientDTO> defaultPatient = new ArrayList<>();
     private static List<StationDTO> defaultStation = new ArrayList<>();
-    private static List<StationDTO> defaultPetition = new ArrayList<>();
-    private static List<StationDTO> defaultUser = new ArrayList<>();
-    private static List<StationDTO> defaultResult = new ArrayList<>();
-    private static List<StationDTO> defaultPractice = new ArrayList<>();
+    private static List<PetitionDTO> defaultPetition = new ArrayList<>();
+    private static List<SystemUserDTO> defaultUser = new ArrayList<>();
+    private static List<ResultDTO> defaultResult = new ArrayList<>();
+    private static List<PracticeDTO> defaultPractice = new ArrayList<>();
     private DefaultListModel<PatientDTO> patientListModel = new DefaultListModel<>();
     private DefaultListModel<StationDTO> stationListModel = new DefaultListModel<>();
-    private DefaultListModel<PatientDTO> petitionListModel = new DefaultListModel<>();
-    private DefaultListModel<PatientDTO> userListModel = new DefaultListModel<>();
-    private DefaultListModel<PatientDTO> resultListModel = new DefaultListModel<>();
-    private DefaultListModel<PatientDTO> practiceListModel = new DefaultListModel<>();
+    private DefaultListModel<PetitionDTO> petitionListModel = new DefaultListModel<>();
+    private DefaultListModel<SystemUserDTO> userListModel = new DefaultListModel<>();
+    private DefaultListModel<ResultDTO> resultListModel = new DefaultListModel<>();
+    private DefaultListModel<PracticeDTO> practiceListModel = new DefaultListModel<>();
 
     private List<PatientDTO> patientsArray = new ArrayList<>();
+    private List<StationDTO> stationsArray = new ArrayList<>();
+    private List<PracticeDTO> practicesArray = new ArrayList<>();
+    private List<PetitionDTO> petitionsArray = new ArrayList<>();
+    private List<ResultDTO> resultsArray = new ArrayList<>();
+    private List<SystemUserDTO> usersArray = new ArrayList<>();
     private static boolean firstQuery = true;
 
     private PatientController patInstance;
     private StationController staInstance;
     private PetitionController petInstance;
-    private PracticeController pracInstance;
-    private UserController userInstance;
-    private ResultController resultInstance;
+    private PracticeController practInstance;
+    private UserController usrInstance;
+//    private ResultController resultInstance;
 
     private int xMouse, yMouse;
     private AdminMainFrame self;
 
     public AdminMainFrame() {
         this.patInstance = PatientController.getInstance();
+        this.usrInstance = UserController.getInstance();
+        this.petInstance = PetitionController.getInstance();
+        this.staInstance = StationController.getInstance();
+        this.practInstance = PracticeController.getInstance();
+//        this.resultInstance = ResultController.getInstance();
         this.self = this;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -126,7 +136,6 @@ public class AdminMainFrame extends JFrame {
         exitLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         accountLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         setUI();
-        System.out.println(Database.getPracticeLength(1));
         this.setLocationRelativeTo(null);
     }
 
@@ -139,6 +148,35 @@ public class AdminMainFrame extends JFrame {
 
 
     private void bindEvents() {
+        // Result events
+        addResultLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddResultFrame frame  = new AddResultFrame(self, "Agregar resultado");
+                frame.setVisible(true);
+            }
+        });
+
+        editResultLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                EditResultFrame frame = new EditResultFrame(self, "Editar resultado", (ResultDTO)resultList.getSelectedValue());
+                frame.setVisible(true);
+            }
+        });
+
+        deleteResultLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                ResultDTO resultDTO = (ResultDTO)resultList.getSelectedValue();
+                int resultToRemove = resultList.getSelectedIndex();
+//                resInstace.deleteResult(resultDTO.getResultId());
+                JOptionPane.showMessageDialog(null,"Resultado eliminado con éxito.", "Resultado eliminado", JOptionPane.INFORMATION_MESSAGE);
+                resultListModel.remove(resultToRemove);
+                defaultResult.remove(resultToRemove);
+            }
+        });
+
         // Petition events
         addPetitionLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -148,19 +186,52 @@ public class AdminMainFrame extends JFrame {
             }
         });
 
+        editPetitionLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                EditPetitionFrame frame = new EditPetitionFrame(self, "Editar petición", (PetitionDTO)petitionList.getSelectedValue());
+                frame.setVisible(true);
+            }
+        });
+
         deletePetitionLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // to do something
+                PetitionDTO petitionDTO = (PetitionDTO)petitionList.getSelectedValue();
+                int petitionToRemove = petitionList.getSelectedIndex();
+                usrInstance.deleteUser(petitionDTO.getPetitionId());
+                JOptionPane.showMessageDialog(null,"Petición eliminada con éxito.", "Petición eliminada", JOptionPane.INFORMATION_MESSAGE);
+                petitionListModel.remove(petitionToRemove);
+                defaultPatient.remove(petitionToRemove);
             }
         });
-        
+
         // User events
+        addUserLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                AddUserFrame frame = new AddUserFrame(self, "Agregar usuario");
+                frame.setVisible(true);
+            }
+        });
+
         editUserLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 EditUserFrame frame = new EditUserFrame(self, "Editar usuario", (SystemUserDTO)userList.getSelectedValue());
                 frame.setVisible(true);
+            }
+        });
+
+        deleteUserLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                SystemUserDTO userDTO = (SystemUserDTO)userList.getSelectedValue();
+                int patientToRemove = userList.getSelectedIndex();
+                usrInstance.deleteUser(userDTO.getUserId());
+                JOptionPane.showMessageDialog(null,"Usuario eliminado con éxito.", "Usuario eliminado", JOptionPane.INFORMATION_MESSAGE);
+                userListModel.remove(patientToRemove);
+                defaultUser.remove(patientToRemove);
             }
         });
 
@@ -187,7 +258,7 @@ public class AdminMainFrame extends JFrame {
                 PracticeDTO practiceDTO = (PracticeDTO) practiceList.getSelectedValue();
                 int practiceToRemove = practiceList.getSelectedIndex();
                 staInstance.deleteStation(practiceDTO.getPracticeId());
-                JOptionPane.showMessageDialog(null,"Práctica eliminada con exito.", "Práctica eliminada", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Práctica eliminada con éxito.", "Práctica eliminada", JOptionPane.INFORMATION_MESSAGE);
                 practiceListModel.remove(practiceToRemove);
                 defaultPractice.remove(practiceToRemove);
             }
@@ -216,7 +287,7 @@ public class AdminMainFrame extends JFrame {
                 StationDTO stationDTO = (StationDTO) stationList.getSelectedValue();
                 int stationToRemove = stationList.getSelectedIndex();
                 staInstance.deleteStation(stationDTO.getStationId());
-                JOptionPane.showMessageDialog(null,"Sucursal eliminada con exito.", "Sucursal eliminada", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Sucursal eliminada con éxito.", "Sucursal eliminada", JOptionPane.INFORMATION_MESSAGE);
                 stationListModel.remove(stationToRemove);
                 defaultStation.remove(stationToRemove);
             }
@@ -227,7 +298,7 @@ public class AdminMainFrame extends JFrame {
             @Override public void removeUpdate(DocumentEvent e) { filter(); }
             @Override public void changedUpdate(DocumentEvent e) {}
             private void filter() {
-                String filter = searchPatientField.getText();
+                String filter = searchStationField.getText();
                 FilterModel.filterModelStation((DefaultListModel<StationDTO>) stationList.getModel(), filter, defaultStation);
             }
         });
@@ -249,22 +320,22 @@ public class AdminMainFrame extends JFrame {
             }
         });
 
-        refreshPatientLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                patientList.setModel(DisplayClasses.displayPatients(patientsArray, defaultPatient, patientListModel));
-            }
-        });
-
         deletePatientLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 PatientDTO patientDTO = (PatientDTO) patientList.getSelectedValue();
                 int patientToRemove = patientList.getSelectedIndex();
                 patInstance.deletePatient(patientDTO.getPatientId());
-                JOptionPane.showMessageDialog(null,"Paciente eliminado con exito.", "Paciente eliminado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Paciente eliminado con éxito.", "Paciente eliminado", JOptionPane.INFORMATION_MESSAGE);
                 patientListModel.remove(patientToRemove);
                 defaultPatient.remove(patientToRemove);
+            }
+        });
+
+        refreshPatientLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                patientList.setModel(DisplayClasses.displayPatients(patientsArray, defaultPatient, patientListModel));
             }
         });
 
@@ -368,7 +439,7 @@ public class AdminMainFrame extends JFrame {
         editStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshStationLabel.setText("<html><u>Refrescar</u></html>");
         refreshStationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        stationList.setModel(DisplayClasses.displayStations());
+        stationList.setModel(DisplayClasses.displayStations(stationsArray, defaultStation, stationListModel));
 
         // Practice panel
         addPracticeLabel.setText("<html><u>Agregar práctica</u></html>");
@@ -379,7 +450,7 @@ public class AdminMainFrame extends JFrame {
         editPracticeLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshPractLabel.setText("<html><u>Refrescar</u></html>");
         refreshPractLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        practiceList.setModel(displayPatients());
+        practiceList.setModel(DisplayClasses.displayPractices(practicesArray, defaultPractice, practiceListModel));
 
         // Petition panel
         addPetitionLabel.setText("<html><u>Agregar petición</u></html>");
@@ -390,7 +461,7 @@ public class AdminMainFrame extends JFrame {
         editPetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshPetitionLabel.setText("<html><u>Refrescar</u></html>");
         refreshPetitionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        petitionList.setModel(displayPatients());
+        petitionList.setModel(DisplayClasses.displayPetitions(petitionsArray, defaultPetition, petitionListModel));
 
         // Result panel
         addResultLabel.setText("<html><u>Agregar resultado</u></html>");
@@ -401,7 +472,7 @@ public class AdminMainFrame extends JFrame {
         editResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshResultLabel.setText("<html><u>Refrescar</u></html>");
         refreshResultLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        resultList.setModel(displayPatients());
+        resultList.setModel(DisplayClasses.displayResults(resultsArray, defaultResult, resultListModel));
 
         // User panel
         addUserLabel.setText("<html><u>Agregar usuario</u></html>");
@@ -412,7 +483,7 @@ public class AdminMainFrame extends JFrame {
         editUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         refreshUserLabel.setText("<html><u>Refrescar</u></html>");
         refreshUserLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        userList.setModel(displayPatients());
+        userList.setModel(DisplayClasses.displayUsers(usersArray, defaultUser, userListModel));
 
     }
 }
