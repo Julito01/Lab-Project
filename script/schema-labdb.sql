@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS LabDB.users (
     username varchar(200) NOT NULL,
     password varchar(200) NOT NULL,
     userType varchar(50) NOT NULL,
-    CONSTRAINT Pk_User PRIMARY KEY (userID)
+    CONSTRAINT Pk_User PRIMARY KEY (userId)
 );
 
 CREATE TABLE IF NOT EXISTS LabDB.patients (
@@ -37,15 +37,16 @@ CREATE TABLE IF NOT EXISTS LabDB.practices (
     practiceId int AUTO_INCREMENT NOT NULL,
     practiceCode int NOT NULL,
     practiceName varchar(255) NOT NULL,
-    practiceLength datetime NOT NULL,
+    practiceLength varchar(250) NOT NULL,
     CONSTRAINT Pk_Practice PRIMARY KEY (practiceId)
 );
 
 CREATE TABLE IF NOT EXISTS LabDB.stations (
     stationId int NOT NULL,
     address varchar(250) NOT NULL,
-    techUser int NOT NULL,
-    CONSTRAINT Pk_Station PRIMARY KEY Pk_Station (stationId)
+    techUserId int NOT NULL,
+    CONSTRAINT Pk_Station PRIMARY KEY Pk_Station (stationId),
+    FOREIGN KEY (techUserId) REFERENCES users(userId)
 );
 
 CREATE TABLE IF NOT EXISTS LabDB.petitions_patients (
@@ -57,6 +58,7 @@ CREATE TABLE IF NOT EXISTS LabDB.petitions_patients (
     FOREIGN KEY (petitionId) REFERENCES petitions(petitionId),
     FOREIGN KEY (practiceId) REFERENCES practices(practiceId)
 );
+
 
 CREATE TABLE IF NOT EXISTS LabDB.users_stations (
     userId int NOT NULL,
