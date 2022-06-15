@@ -1,8 +1,6 @@
 package dtos;
-import java.util.*;
 
-import classes.Practice;
-import classes.enumerations.ResultType;
+import java.sql.Time;
 import config.Database;
 
 import javax.xml.transform.Result;
@@ -10,17 +8,16 @@ import javax.xml.transform.Result;
 public class PracticeDTO {
     private static int practiceId;
     private int counter = 1;
-    private static int practCodeCounter = 1000;
     private static int practiceCode;
     private static String practiceName;
+    private Time eth;
 
-    public PracticeDTO(String practiceName) {
-        practiceId = counter;
-        practiceCode = practCodeCounter;
-        PracticeDTO.practiceName = practiceName;
-        createPractice(this);
+    public PracticeDTO(int practiceCode, String practiceName, Time eth) {
+        this.practiceId = counter;
+        this.practiceCode = practiceCode;
+        this.practiceName = practiceName;
+        this.eth = eth;
         counter++;
-        practCodeCounter++;
     }
 
     public void setPracticePetition() {
@@ -30,12 +27,6 @@ public class PracticeDTO {
     protected void getResultType() {
         // Get the type of the result (could be Critical or Reserved)
         // return /* something */
-    }
-
-    private void createPractice(PracticeDTO practiceDTO) {
-        String practiceName = practiceDTO.getPracticeName();
-
-        Practice practice = new Practice(practiceName);
     }
 
     private void deletePractice() {
@@ -50,10 +41,6 @@ public class PracticeDTO {
         return Database.getPracticeId(practiceName);
     }
 
-    public List<String> getAllPractices() {
-        return Database.getPractices();
-    }
-
     public int getPracticeId() {
         return practiceId;
     }
@@ -64,5 +51,9 @@ public class PracticeDTO {
 
     public String getPracticeName() {
         return practiceName;
+    }
+
+    public Time getEth() {
+        return this.eth;
     }
 }
