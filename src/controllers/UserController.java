@@ -26,6 +26,10 @@ public class UserController {
         // User validations
         if (verifyUsername(username) && verifyPass(password1, password2) && verifyUserType(userType) && !SystemUser.verifyUserExist(username)) {
             SystemUserDTO newUser = new SystemUserDTO(username, password1, userType);
+            System.out.println(username);
+            System.out.println(password1);
+            System.out.println(userType);
+            SystemUser.createSystemUser(newUser);
             JOptionPane.showMessageDialog(null, "Usuario creado con exito.", "Usuario creado", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
@@ -41,6 +45,17 @@ public class UserController {
             JOptionPane.showMessageDialog(null, "Ingrese un usuario de mas de 4 caracteres.", "Error", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+    }
+
+    private boolean verifyUserType(Object userType) {
+        if (userType != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean verifyUserExist(String username) {
+        return SystemUser.verifyUserExist(username);
     }
 
     public static List<SystemUserDTO> getAllUsers() {
@@ -65,12 +80,13 @@ public class UserController {
         }
     }
 
-    private boolean verifyUserType(Object userType) {
-        if (userType != null) {
-            return true;
+    public UserTypeEnum getUserType(String username) {
+        List<SystemUserDTO> systemUsers = SystemUser.getAllUsers();
+        for (SystemUserDTO systemUserDTO : systemUsers) {
+            if (username.equals(systemUserDTO.getUsername())) {
+                return systemUserDTO.getUserType();
+            }
         }
-        else {
-            return false;
-        }
+        return null;
     }
 }
