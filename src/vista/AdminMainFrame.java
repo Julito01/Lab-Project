@@ -147,6 +147,13 @@ public class AdminMainFrame extends JFrame {
                 frame.setVisible(true);
             }
         });
+
+        deletePetitionLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // to do something
+            }
+        });
         // User events
         editUserLabel.addMouseListener(new MouseAdapter() {
             @Override
