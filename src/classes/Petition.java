@@ -1,8 +1,7 @@
 package classes;
 
 import config.Database;
-import dtos.PetitionDTO;
-import dtos.PracticeDTO;
+import dtos.*;
 
 import java.time.LocalDate;
 import java.util.*;

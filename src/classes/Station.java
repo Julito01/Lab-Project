@@ -1,27 +1,41 @@
 package classes;
 
+import config.Database;
+import dtos.StationDTO;
+
+import java.util.List;
+
 public class Station {
+    private static int counter = 1;
     private int stationId;
-    private String direccion;
+    private String address;
 
-    public Station(int stationId, String direccion) {
-        this.stationId = stationId;
-        this.direccion = direccion;
+    public Station(StationDTO station) {
+        this.stationId = counter;
+        this.address = station.getAddress();
+        counter++;
     }
 
-    public static void main(String[] args) {
-
-    }
-
-    private void createStation() {
+    public void createStation(StationDTO station) {
         // Creates a new station
+        Database.createStation(station);
     }
 
-    private void bajaStation() {
+    public static void deleteStation(int stationId) {
         // Delete the desired station through the station id
+        Database.deleteStation(stationId);
     }
 
-    private void editStation() {
+    public static void updateStation(StationDTO station) {
         // Modifies a desired station through the station id
+        Database.updateStation(station);
+    }
+
+    public static List<StationDTO> getAllStations() {
+        return Database.getAllStations();
+    }
+
+    public String getAddress() {
+        return this.address;
     }
 }
