@@ -1,9 +1,6 @@
 package config;
 
-import classes.Patient;
-import classes.Petition;
-import classes.Practice;
-import classes.SystemUser;
+import classes.*;
 import dtos.PatientDTO;
 
 import java.sql.*;
@@ -17,6 +14,8 @@ public class Database {
     private static List<String[]> users = new ArrayList<>();
     private static List<String> practices = new ArrayList<>();
     private static List<PatientDTO> patients = new ArrayList<>();
+
+    private static List<String> station = new ArrayList<>();
 
     public static void createConnection() throws SQLException {
         try {
@@ -227,4 +226,119 @@ public class Database {
             System.out.println("Error" + error);
         }
     }
+
+
+    // Station's methods
+    public static void createStation(Station station) {
+        try {
+            createConnection();
+            String sql = "INSERT INTO station (stationId, address, techUser)" +
+                    "VALUES (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, station.getStationId());
+            stm.setString(2, station.getAddress());
+            stm.setString(3, station.getTechUser());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
+
+    public static void deleteStation(int stationId) {
+        try {
+            createConnection();
+            String sql = "DELETE FROM patients WHERE patientId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, stationId);
+            stm.executeUpdate(stm.toString());
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+    }
+
+    public static void updateStation(Station station) {
+        try {
+            createConnection();
+            String sql = "UPDATE patients SET dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, station.getStationId());
+            stm.setString(2, station.getAddress());
+            stm.setString(3, station.getTechUser());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
+
+    public static List<String> getStation() {
+        try {
+            createConnection();
+            Statement stm = con.createStatement();
+            ResultSet result  = stm.executeQuery("SELECT practiceName FROM practices;");
+            while (result.next()) {
+                String practiceName = result.getString(1);
+                practices.add(practiceName);
+            }
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+        return practices;
+    }
+
+
+
+    // Result's methods
+    public static void createResult(Result result) {
+        try {
+            createConnection();
+            String sql = "INSERT INTO result (petitionId, resultType, resultValueType)" +
+                    "VALUES (?, ?, ?)";
+            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, result.getPetitionId());
+            stm.setInt(2, result.getResultType());
+            stm.setString(3, result.getResultValueType());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
+
+    public static void deleteResult(int petitionId) {
+        try {
+            createConnection();
+            String sql = "DELETE FROM result WHERE petitionId = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, petitionId);
+            stm.executeUpdate(stm.toString());
+        }
+        catch (Exception error) {
+            System.out.println("Error" + error);
+        }
+    }
+
+    public static void updateResult(Station station) {
+        try {
+            createConnection();
+            String sql = "UPDATE result SET petitionId = ?,  = ?, address = ?";
+            PreparedStatement stm = con.prepareStatement(sql);
+            stm.setInt(1, result.getPetitionId());
+            stm.setInt(2, result.getResultType());
+            stm.setString(3, result.getResultValueType());
+            stm.executeUpdate();
+            con.close();
+        }
+        catch (Exception error) {
+            System.out.println("Error: " + error);
+        }
+    }
+    //Falta la lista pero en ingles
 }
