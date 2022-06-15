@@ -2,6 +2,7 @@ package vista;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import controllers.PetitionController;
+import dtos.PetitionDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,9 +34,11 @@ public class EditPetitionFrame extends JDialog {
     private JComboBox medInsField;
     private JLabel addLabel;
     private JLabel practAddedLabel;
+    private PetitionDTO petitionDTO;
 
-    public EditPetitionFrame(Window owner, String title) {
+    public EditPetitionFrame(Window owner, String title, PetitionDTO petitionDTO) {
         super(owner, title);
+        this.petitionDTO = petitionDTO;
         this.petInstance = PetitionController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
