@@ -2,12 +2,14 @@ package vista;
 
 import classes.SystemUser;
 import classes.enumerations.UserTypeEnum;
+import controllers.UserController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class LoginFrame extends JFrame {
+    private UserController usrInstance;
     private JPanel mainPanel;
     private JLabel titleLabel;
     private JTextField userField;
@@ -28,7 +30,7 @@ public class LoginFrame extends JFrame {
     //Color verde 45932F
     public LoginFrame(String title) {
         super(title);
-
+        this.usrInstance = UserController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(1280, 800); // sets the x-dimension, and y-dimension of frame
@@ -191,10 +193,10 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
                 }
                 else {
-                    System.out.println("Usuario: " + userInput + "\nContraseña: " + userInput);
-                    if (SystemUser.verifyUserExist(userInput)) {
+                    System.out.println("Usuario: " + userInput + "\nContraseña: " + passInput);
+                    if (usrInstance.verifyUserExist(userInput)) {
                         self.dispose();
-                        UserTypeEnum userType = SystemUser.verifyUserType(userInput);
+                        UserTypeEnum userType = usrInstance.getUserType(userInput);
                         System.out.println("Tipo de usuario: " + userType);
                         if (userType == UserTypeEnum.ADMINISTRADOR) {
                             AdminMainFrame frame = new AdminMainFrame();
