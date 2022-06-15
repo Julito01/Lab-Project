@@ -14,7 +14,7 @@ public class SystemUserDTO extends Person {
     private LocalDate birthdate;
     private static UserTypeEnum userType;
     private static SystemUserDTO self;
-    private static List<String[]> systemUsers = new ArrayList<>();
+    private static List<SystemUserDTO> systemUsers = new ArrayList<>();
 
     public SystemUserDTO() {}
 
@@ -36,20 +36,20 @@ public class SystemUserDTO extends Person {
         SystemUser systemUser = new SystemUser(username, password, userType);
     }
 
-    public String verifyUserType(String username) {
-        String typeOfUser = null;
+    public UserTypeEnum verifyUserType(String username) {
+        UserTypeEnum typeOfUser = null;
         for (int i = 0; i < systemUsers.size(); i++) {
-            if (username.equals(systemUsers.get(i)[0])) {
-                typeOfUser = systemUsers.get(i)[2];
+            if (username.equals(systemUsers.get(i).getUsername())) {
+                typeOfUser = systemUsers.get(i).getUserType();
             }
         }
         return typeOfUser;
     }
 
     public boolean verifyUserExist(String username) {
-        systemUsers = Database.getUsers();
+        systemUsers = Database.getAllUsers();
         for (int i = 0; i < systemUsers.size(); i++) {
-            if (username.equals(systemUsers.get(i)[0])) {
+            if (username.equals(systemUsers.get(i).getUsername())) {
                 return true;
             }
         }
