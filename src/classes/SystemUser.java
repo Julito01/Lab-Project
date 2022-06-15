@@ -19,15 +19,13 @@ public class SystemUser extends Person {
     public SystemUser() {}
 
     public SystemUser(String username, String password, UserTypeEnum userType) {
-        super();
         this.username = username;
         this.password = password;
         this.userType = userType;
         this.self = this;
-        createSystemUser(this);
     }
 
-    private void createSystemUser(SystemUser user) {
+    public static void createSystemUser(SystemUserDTO user) {
         // Creates a new user and adds it to the database
         Database.createUser(user);
     }
@@ -46,6 +44,7 @@ public class SystemUser extends Person {
         systemUsers = Database.getAllUsers();
         for (SystemUserDTO systemUser: systemUsers) {
             if (username.equals(systemUser.getUsername())) {
+                systemUser.getUsername();
                 return true;
             }
         }
