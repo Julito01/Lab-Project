@@ -44,6 +44,7 @@ public class Patient extends Person {
         return patients;
     }
 
+    // Getters
     public int getPatientId() {
         return this.patientId;
     }
