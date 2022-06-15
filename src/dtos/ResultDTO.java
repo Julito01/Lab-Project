@@ -1,2 +1,5 @@
-package dtos;public class ResultDTO {
+package dtos;
+
+public class ResultDTO {
+    public ResultDTO() {}
 }
