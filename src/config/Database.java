@@ -23,7 +23,7 @@ public class Database {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, username, password);
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error createConnection(): " + error);
         }
     }
 
@@ -31,7 +31,7 @@ public class Database {
     public static void createUser(SystemUserDTO user) {
         try {
             createConnection();
-            String sql = "INSERT INTO users (username, password, userType) VALUES (?, ?, ? )";
+            String sql = "INSERT INTO users (username, password, userType) VALUES (?, ?, ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, user.getUsername());
             stm.setString(2, user.getPassword());
@@ -39,7 +39,7 @@ public class Database {
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error createUser(): " + error);
         }
     }
 
@@ -51,7 +51,7 @@ public class Database {
             stm.setInt(1, userId);
             stm.executeUpdate(stm.toString());
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error deleteUser(): " + error);
         }
     }
 
@@ -67,7 +67,7 @@ public class Database {
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error updateUser(): " + error);
         }
     }
 
@@ -82,7 +82,7 @@ public class Database {
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error getAllUsers(): " + error);
         }
         return users;
     }
@@ -103,7 +103,7 @@ public class Database {
     public static void createPatient(Patient patient) {
         try {
             createConnection();
-            String sql = "INSERT INTO patients (dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?)";
+            String sql = "INSERT INTO patients (patientId, dni, name, address, mail, genre, age) VALUES (?, ?, ?, ?, ?, ? ,?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, patient.getPatientId());
             stm.setString(2, patient.getPatientDni());
@@ -115,7 +115,7 @@ public class Database {
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error createPatient(): " + error);
         }
     }
 
@@ -127,7 +127,7 @@ public class Database {
             stm.setInt(1, patientId);
             stm.executeUpdate(stm.toString());
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error deletePatient(): " + error);
         }
     }
 
@@ -146,7 +146,7 @@ public class Database {
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error updatePatient(): " + error);
         }
     }
 
@@ -161,7 +161,7 @@ public class Database {
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getAllPatients(): " + error);
         }
         return patients;
     }
@@ -179,7 +179,7 @@ public class Database {
             stm.setString(4, practice.getEth());
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error createPractice(): " + error);
         }
     }
 
@@ -191,20 +191,20 @@ public class Database {
             stm.setInt(1, practiceId);
             stm.executeUpdate(stm.toString());
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error deletePractice(): " + error);
         }
     }
 
     public static void updatePractice(PracticeDTO practice) {
         try {
             createConnection();
-            String sql = "UPDATE practices SET practiceId = ?, practiceCode = ?, practiceName = ?, practiceLenght = ?";
+            String sql = "UPDATE practices SET practiceId = ?, practiceCode = ?, practiceName = ?, practiceLength = ?";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, practice.getPracticeCode());
             stm.setString(2, practice.getPracticeName());
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error updatePractice()" + error);
         }
     }
 
@@ -220,7 +220,7 @@ public class Database {
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getAllPractices(): " + error);
         }
         return practices;
     }
@@ -231,7 +231,7 @@ public class Database {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            sql.append("SELECT practiceId FROM practices WHERE practiceName = ?");
+            sql.append("SELECT practiceId FROM practices WHERE practiceName = ");
             sql.append(practiceName);
             ResultSet result = stm.executeQuery(sql.toString());
             while (result.next()) {
@@ -239,25 +239,26 @@ public class Database {
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getPracticeId(): " + error);
         }
         return practiceId;
     }
 
-    public static int getPracticeLength(int practiceId) {
-        int practiceLength = 0;
+    public static String getPracticeLength(int practiceId) {
+        StringBuilder sql = new StringBuilder();
+        String practiceLength = "";
         try {
             createConnection();
-            String sql = "SELECT practiceLength FROM practices WHERE practiceId = ?";
-            PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stm.setInt(1, practiceId);
-            ResultSet result = stm.executeQuery(sql);
+            Statement stm = con.createStatement();
+            sql.append("SELECT practiceLength FROM practices WHERE practiceId = ");
+            sql.append(practiceId);
+            ResultSet result = stm.executeQuery(sql.toString());
             while (result.next()) {
-                practiceLength = result.getInt(1);
+                practiceLength = result.getString(1);
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getPracticeLength(): " + error);
         }
         return practiceLength;
     }
@@ -266,7 +267,7 @@ public class Database {
     public static void createPetition(Petition petition) {
         try {
             createConnection();
-            String sql = "INSERT INTO petitions (ID_Peticion, Fecha_Carga, Fecha_Entrega)" +
+            String sql = "INSERT INTO petitions (petitionId, loadDate, deliverDate)" +
                     "VALUES (?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, petition.getPetitionId());
@@ -274,7 +275,7 @@ public class Database {
             stmt.setString(3, petition.getEtaDate());
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error createPetition(): " + error);
         }
     }
 
@@ -289,7 +290,7 @@ public class Database {
             stmt.setInt(3, practiceId);
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error createPatientPetition(): " + error);
         }
     }
 
@@ -297,43 +298,44 @@ public class Database {
     public static void createStation(StationDTO station) {
         try {
             createConnection();
-            String sql = "INSERT INTO station (stationId, address, techUser)" +
+            String sql = "INSERT INTO stations (stationId, address, techUserId)" +
                     "VALUES (?, ?, ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, station.getStationId());
             stm.setString(2, station.getAddress());
-//            stm.setString(3, station.getTechUser());
+            stm.setInt(3, station.getTechUserId());
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error createStation(): " + error);
         }
     }
 
     public static void deleteStation(int stationId) {
         try {
             createConnection();
-            String sql = "DELETE FROM patients WHERE patientId = ?";
+            String sql = "DELETE FROM stations WHERE stationId = ?";
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, stationId);
             stm.executeUpdate(stm.toString());
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error deleteStation(): " + error);
         }
     }
 
     public static void updateStation(StationDTO station) {
         try {
             createConnection();
-            String sql = "UPDATE patients SET dni = ?, name = ?, address = ?, mail = ?, genre = ?, age = ? WHERE patientId = ?";
+            String sql = "UPDATE stations SET stationId = ?, address = ?, techUser = ? WHERE stationId = ?";
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, station.getStationId());
             stm.setString(2, station.getAddress());
-//            stm.setString(3, station.getTechUser());
+            stm.setInt(3, station.getTechUserId());
+            stm.setInt(4, station.getStationId());
             stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error updateStation(): " + error);
         }
     }
 
@@ -341,14 +343,14 @@ public class Database {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("SELECT * FROM station");
+            ResultSet result = stm.executeQuery("SELECT * FROM stations");
             while (result.next()) {
                 StationDTO station = new StationDTO(result.getString(2), result.getInt(3));
                 stations.add(station);
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getAllStations(): " + error);
         }
         return stations;
     }
@@ -358,7 +360,7 @@ public class Database {
     public static void createResult(ResultDTO result) {
         try {
             createConnection();
-            String sql = "INSERT INTO result (petitionId, resultType, resultValueType)" +
+            String sql = "INSERT INTO result (resultId, resultValue, resultValueType)" +
                     "VALUES (?, ?, ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 //            stm.setInt(1, result.getPetitionId());
@@ -367,26 +369,26 @@ public class Database {
 //            stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error createResult(): " + error);
         }
     }
 
-    public static void deleteResult(int petitionId) {
+    public static void deleteResult(int resultId) {
         try {
             createConnection();
-            String sql = "DELETE FROM result WHERE petitionId = ?";
+            String sql = "DELETE FROM result WHERE resultId = ?";
             PreparedStatement stm = con.prepareStatement(sql);
-            stm.setInt(1, petitionId);
+            stm.setInt(1, resultId);
             stm.executeUpdate(stm.toString());
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error deleteResult(): " + error);
         }
     }
 
-    public static void updateResult(Station station) {
+    public static void updateResult(ResultDTO result) {
         try {
             createConnection();
-            String sql = "UPDATE result SET petitionId = ?,  = ?, address = ?";
+            String sql = "UPDATE result SET resultValue = ?,  resultType = ? WHERE resultId = ?";
             PreparedStatement stm = con.prepareStatement(sql);
 //            stm.setInt(1, result.getPetitionId());
 //            stm.setInt(2, result.getResultType());
@@ -394,7 +396,7 @@ public class Database {
 //            stm.executeUpdate();
             con.close();
         } catch (Exception error) {
-            System.out.println("Error: " + error);
+            System.out.println("Error updateResult(): " + error);
         }
     }
 
@@ -409,7 +411,7 @@ public class Database {
             }
             con.close();
         } catch (Exception error) {
-            System.out.println("Error" + error);
+            System.out.println("Error getAllResults(): " + error);
         }
         return results;
     }
