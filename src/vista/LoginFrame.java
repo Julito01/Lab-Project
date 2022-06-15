@@ -1,12 +1,15 @@
 package vista;
 
 import classes.SystemUser;
+import classes.enumerations.UserTypeEnum;
+import controllers.UserController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class LoginFrame extends JFrame {
+    private UserController usrInstance;
     private JPanel mainPanel;
     private JLabel titleLabel;
     private JTextField userField;
@@ -27,7 +30,7 @@ public class LoginFrame extends JFrame {
     //Color verde 45932F
     public LoginFrame(String title) {
         super(title);
-
+        this.usrInstance = UserController.getInstance();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(1280, 800); // sets the x-dimension, and y-dimension of frame
@@ -73,7 +76,7 @@ public class LoginFrame extends JFrame {
         createUserButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                CreateUserFrame frame = new CreateUserFrame(self, "Crear usuario");
+                AddUserFrame frame = new AddUserFrame(self, "Crear usuario");
                 frame.setVisible(true);
             }
         });
@@ -190,19 +193,19 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(self, "Faltan completar campos", "Error", JOptionPane.WARNING_MESSAGE);
                 }
                 else {
-                    System.out.println("Usuario: " + userInput + "\nContraseña: " + userInput);
-                    if (SystemUser.verifyUserExist(userInput)) {
+                    System.out.println("Usuario: " + userInput + "\nContraseña: " + passInput);
+                    if (usrInstance.verifyUserExist(userInput)) {
                         self.dispose();
-                        String userType = SystemUser.verifyUserType(userInput);
+                        UserTypeEnum userType = usrInstance.getUserType(userInput);
                         System.out.println("Tipo de usuario: " + userType);
-                        if (userType.equals("ADMINISTRADOR")) {
+                        if (userType == UserTypeEnum.ADMINISTRADOR) {
                             AdminMainFrame frame = new AdminMainFrame();
                             frame.setVisible(true);
-                        } else if (userType.equals("LABORATORISTA")) {
+                        } else if (userType == UserTypeEnum.LABORATORISTA) {
                             LabMainFrame frame = new LabMainFrame();
                             frame.setVisible(true);
                         }
-                        else if (userType.equals("RECEPCIONISTA")) {
+                        else if (userType == UserTypeEnum.RECEPCIONISTA) {
                             RecMainFrame frame = new RecMainFrame();
                             frame.setVisible(true);
                         }

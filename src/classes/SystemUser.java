@@ -1,6 +1,8 @@
 package classes;
 import classes.enumerations.UserTypeEnum;
 import config.Database;
+import dtos.*;
+
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,38 +14,37 @@ public class SystemUser extends Person {
     private LocalDate birthdate;
     private static UserTypeEnum userType;
     private static SystemUser self;
-    private static List<String[]> systemUsers = new ArrayList<>();
+    private static List<SystemUserDTO> systemUsers = new ArrayList<>();
 
     public SystemUser() {}
 
     public SystemUser(String username, String password, UserTypeEnum userType) {
-        super();
         this.username = username;
         this.password = password;
         this.userType = userType;
         this.self = this;
-        createSystemUser(this);
     }
 
-    private void createSystemUser(SystemUser user) {
+    public static void createSystemUser(SystemUserDTO user) {
         // Creates a new user and adds it to the database
         Database.createUser(user);
     }
 
-    public static String verifyUserType(String username) {
-        String typeOfUser = null;
-        for (int i = 0; i < systemUsers.size(); i++) {
-            if (username.equals(systemUsers.get(i)[0])) {
-                typeOfUser = systemUsers.get(i)[2];
+    public static UserTypeEnum verifyUserType(String username) {
+        UserTypeEnum typeOfUser = null;
+        for (SystemUserDTO systemUser: systemUsers) {
+            if (username.equals(systemUser.getUsername())) {
+                typeOfUser = systemUser.getUserType();
             }
         }
         return typeOfUser;
     }
 
     public static boolean verifyUserExist(String username) {
-        systemUsers = Database.getUsers();
-        for (int i = 0; i < systemUsers.size(); i++) {
-            if (username.equals(systemUsers.get(i)[0])) {
+        systemUsers = Database.getAllUsers();
+        for (SystemUserDTO systemUser: systemUsers) {
+            if (username.equals(systemUser.getUsername())) {
+                systemUser.getUsername();
                 return true;
             }
         }
@@ -56,6 +57,10 @@ public class SystemUser extends Person {
 
     private void editSystemUser() {
         // Modifies the permissions or data of a user through the user id
+    }
+
+    public static List<SystemUserDTO> getAllUsers() {
+        return Database.getAllUsers();
     }
 
     public String getUsername() {

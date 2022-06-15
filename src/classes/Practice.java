@@ -2,23 +2,21 @@ package classes;
 import java.util.*;
 import classes.enumerations.ResultType;
 import config.Database;
+import dtos.PracticeDTO;
 
 import javax.xml.transform.Result;
 
 public class Practice {
     private static int practiceId;
     private int counter = 1;
-    private static int practCodeCounter = 1000;
     private static int practiceCode;
     private static String practiceName;
 
-    public Practice(String practiceName) {
-        practiceId = counter;
-        practiceCode = practCodeCounter;
-        Practice.practiceName = practiceName;
-        createPractice(this);
+    public Practice(String practiceName, int practiceCode) {
+        this.practiceId = counter;
+        this.practiceCode = practiceCode;
+        this.practiceName = practiceName;
         counter++;
-        practCodeCounter++;
     }
 
     protected void getResultType() {
@@ -26,24 +24,24 @@ public class Practice {
         // return /* something */
     }
 
-    private void createPractice(Practice practice) {
+    public static void createPractice(PracticeDTO practice) {
         Database.createPractice(practice);
     }
 
-    private void deletePractice() {
-        Database.deletePractice();
+    private void deletePractice(int practiceId) {
+        Database.deletePractice(practiceId);
     }
 
-    private void editPractice() {
-        Database.editPractice();
+    private void editPractice(PracticeDTO practice) {
+        Database.updatePractice(practice);
     }
 
     public static int getCurrPracticeId(String practiceName) {
         return Database.getPracticeId(practiceName);
     }
 
-    public static List<String> getAllPractices() {
-        return Database.getPractices();
+    public static List<PracticeDTO> getAllPractices() {
+        return Database.getAllPractices();
     }
 
     public static int getPracticeId() {

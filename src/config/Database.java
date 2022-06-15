@@ -1,48 +1,44 @@
 package config;
 
 import classes.*;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-import dtos.PatientDTO;
-import dtos.PracticeDTO;
+import classes.enumerations.UserTypeEnum;
+import dtos.*;
 
 import java.sql.*;
 import java.util.*;
 
 public class Database {
     private static String url = "jdbc:mysql://localhost:3306/LabDB";
-    private static String username="root";
-    private static String password="Isabel1234";
+    private static String username = "root";
+    private static String password = "Isabel1234";
     private static Connection con;
-    private static List<String[]> users = new ArrayList<>();
-    private static List<String> practices = new ArrayList<>();
+    private static List<SystemUserDTO> users = new ArrayList<>();
+    private static List<PracticeDTO> practices = new ArrayList<>();
     private static List<PatientDTO> patients = new ArrayList<>();
-
-    private static List<String> station = new ArrayList<>();
+    private static List<StationDTO> stations = new ArrayList<>();
+    private static List<ResultDTO> results = new ArrayList<>();
 
     public static void createConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, username, password);
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
 
     // User's methods
-    public static void createUser(SystemUser user) {
+    public static void createUser(SystemUserDTO user) {
         try {
             createConnection();
-            String sql = "INSERT INTO users (userId = ?,username = ?, password = ?, userType = ?)";
+            String sql = "INSERT INTO users (username, password, userType) VALUES (?, ?, ? )";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setString(1, user.getUsername());
-            stm.setString(2, user.getUsername());
-            stm.setString(3, user.getPassword());
-            stm.setString(4, user.getUserType());
+            stm.setString(2, user.getPassword());
+            stm.setString(3, user.getUserType().toString());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
@@ -54,8 +50,7 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, userId);
             stm.executeUpdate(stm.toString());
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -71,26 +66,37 @@ public class Database {
             stm.setString(4, user.getUserType());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
-    public static List<String[]> getUsers() {
+
+    public static List<SystemUserDTO> getAllUsers() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("SELECT * FROM users;");
+            ResultSet result = stm.executeQuery("SELECT * FROM users");
             while (result.next()) {
-                String[] currentUser = {result.getString(2), result.getString(3), result.getString(4)};
+                SystemUserDTO currentUser = new SystemUserDTO(result.getString(2), result.getString(3), getUserType(result.getString(4)));
                 users.add(currentUser);
             }
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
         return users;
+    }
+
+    private static UserTypeEnum getUserType(String userType) {
+        if (userType.equals("ADMINISTRADOR")) {
+            return UserTypeEnum.ADMINISTRADOR;
+        }
+        else if (userType.equals("LABORATORISTA")) {
+            return UserTypeEnum.LABORATORISTA;
+        }
+        else {
+            return UserTypeEnum.RECEPCIONISTA;
+        }
     }
 
     // Patient's methods
@@ -108,8 +114,7 @@ public class Database {
             stm.setString(7, patient.getAge());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
@@ -121,8 +126,7 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, patientId);
             stm.executeUpdate(stm.toString());
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -141,8 +145,7 @@ public class Database {
             stm.setInt(7, patient.getPatientId());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
@@ -157,15 +160,14 @@ public class Database {
                 patients.add(patient);
             }
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
         return patients;
     }
 
     // Practice's methods
-    public static void createPractice(Practice practice) {
+    public static void createPractice(PracticeDTO practice) {
         try {
             createConnection();
             String sql = "INSERT INTO practices (practiceCode, practiceName)" +
@@ -174,10 +176,9 @@ public class Database {
             stm.setInt(1, practice.getPracticeId());
             stm.setInt(2, practice.getPracticeCode());
             stm.setString(3, practice.getPracticeName());
-            stm.setInt(4, practice.getPracticeLength());
+            stm.setString(4, practice.getEth());
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -189,8 +190,7 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, practiceId);
             stm.executeUpdate(stm.toString());
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -203,25 +203,23 @@ public class Database {
             stm.setInt(1, practice.getPracticeCode());
             stm.setString(2, practice.getPracticeName());
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
 
 
-    public static List<String> getPractices() {
+    public static List<PracticeDTO> getAllPractices() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result  = stm.executeQuery("SELECT practiceName FROM practices");
+            ResultSet result = stm.executeQuery("SELECT * FROM practices");
             while (result.next()) {
-                String practiceName = result.getString(1);
+                PracticeDTO practiceName = new PracticeDTO(result.getInt(1), result.getString(2), result.getString(3));
                 practices.add(practiceName);
             }
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
         return practices;
@@ -250,7 +248,7 @@ public class Database {
         int practiceLength = 0;
         try {
             createConnection();
-            String sql= "SELECT practiceLength FROM practices WHERE practiceId = ?";
+            String sql = "SELECT practiceLength FROM practices WHERE practiceId = ?";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, practiceId);
             ResultSet result = stm.executeQuery(sql);
@@ -275,8 +273,7 @@ public class Database {
             stmt.setString(2, petition.getLoadDate());
             stmt.setString(3, petition.getEtaDate());
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -291,15 +288,13 @@ public class Database {
             stmt.setInt(2, petitionId);
             stmt.setInt(3, practiceId);
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
 
-
     // Station's methods
-    public static void createStation(Station station) {
+    public static void createStation(StationDTO station) {
         try {
             createConnection();
             String sql = "INSERT INTO station (stationId, address, techUser)" +
@@ -307,11 +302,10 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stm.setInt(1, station.getStationId());
             stm.setString(2, station.getAddress());
-            stm.setString(3, station.getTechUser());
+//            stm.setString(3, station.getTechUser());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
@@ -323,8 +317,7 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, stationId);
             stm.executeUpdate(stm.toString());
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -336,47 +329,44 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, station.getStationId());
             stm.setString(2, station.getAddress());
-            stm.setString(3, station.getTechUser());
+//            stm.setString(3, station.getTechUser());
             stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
 
-    public static List<String> getAllStation() {
+    public static List<StationDTO> getAllStations() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet station = stm.executeQuery("SELECT * FROM station");
+            ResultSet result = stm.executeQuery("SELECT * FROM station");
             while (result.next()) {
-                StationDTO station = new PatientDTO(station.getString(2), station.getString(3), station.getString(4));
-                station.add(station);
+                StationDTO station = new StationDTO(result.getString(2), result.getInt(3));
+                stations.add(station);
             }
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
-        return station;
+        return stations;
     }
 
 
     // Result's methods
-    public static void createResult(Result result) {
+    public static void createResult(ResultDTO result) {
         try {
             createConnection();
             String sql = "INSERT INTO result (petitionId, resultType, resultValueType)" +
                     "VALUES (?, ?, ?)";
             PreparedStatement stm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stm.setInt(1, result.getPetitionId());
-            stm.setInt(2, result.getResultType());
-            stm.setString(3, result.getResultValueType());
-            stm.executeUpdate();
+//            stm.setInt(1, result.getPetitionId());
+//            stm.setInt(2, result.getResultType());
+//            stm.setString(3, result.getResultValueType());
+//            stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
@@ -388,8 +378,7 @@ public class Database {
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setInt(1, petitionId);
             stm.executeUpdate(stm.toString());
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
     }
@@ -399,30 +388,29 @@ public class Database {
             createConnection();
             String sql = "UPDATE result SET petitionId = ?,  = ?, address = ?";
             PreparedStatement stm = con.prepareStatement(sql);
-            stm.setInt(1, result.getPetitionId());
-            stm.setInt(2, result.getResultType());
-            stm.setString(3, result.getResultValueType());
-            stm.executeUpdate();
+//            stm.setInt(1, result.getPetitionId());
+//            stm.setInt(2, result.getResultType());
+//            stm.setString(3, result.getResultValueType());
+//            stm.executeUpdate();
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error: " + error);
         }
     }
 
-    public static List<String> getAllResults() {
+    public static List<ResultDTO> getAllResults() {
         try {
             createConnection();
             Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("SELECT * FROM station");
-            while (result.next()) {
-                ResultDTO result = new PatientDTO(reslut.getString(2), result.getString(3), result.getString(4));
-                result.add(result);
+            ResultSet queryResult = stm.executeQuery("SELECT * FROM results");
+            while (queryResult.next()) {
+//                ResultDTO result = new ResultDTO(queryResult.getString(2), queryResult.getString(3), queryResult.getString(4));
+//                results.add(result);
             }
             con.close();
-        }
-        catch (Exception error) {
+        } catch (Exception error) {
             System.out.println("Error" + error);
         }
-        return result;
+        return results;
+    }
 }

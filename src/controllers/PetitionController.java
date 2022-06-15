@@ -1,8 +1,6 @@
 package controllers;
 
 import classes.Petition;
-import classes.Practice;
-import config.Database;
 import dtos.PetitionDTO;
 import dtos.PracticeDTO;
 
