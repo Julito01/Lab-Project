@@ -15,6 +15,11 @@ public class StationDTO {
         counter++;
     }
 
+    @Override
+    public String toString() {
+        return this.address;
+    }
+
     // Getters
     public int getStationId() {
         return this.stationId;
@@ -22,6 +27,10 @@ public class StationDTO {
 
     public String getAddress() {
         return this.address;
+    }
+
+    public int getTechUserId() {
+        return this.techUserId;
     }
 
     // Setters
